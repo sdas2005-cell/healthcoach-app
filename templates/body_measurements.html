@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Body Measurements</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/body.css') }}">
+</head>
+
+<body>
+
+<h1 class="title">Body Measurements</h1>
+
+<div class="page-layout">
+
+<form method="POST" id="bodyForm" class="main-container">
+
+<div class="left-section">
+
+<h3>Basic</h3>
+
+<input type="number" step="any" min="20" max="300"
+name="weight"
+value="{{ data.weight if data else '' }}"
+placeholder="Weight (kg)"
+title="Enter weight between 20–300 kg"
+required>
+
+<input type="number" step="any" min="80" max="250"
+name="height"
+value="{{ data.height if data else '' }}"
+placeholder="Height (cm)"
+title="Enter height between 80–250 cm"
+required>
+
+
+<h3>Upper Body</h3>
+
+<input type="number" step="any" min="20" max="80"
+name="neck"
+value="{{ data.neck if data else '' }}"
+placeholder="Neck (cm)"
+title="Enter neck size between 20–80 cm"
+required>
+
+<input type="number" step="any" min="50" max="200"
+name="chest"
+value="{{ data.chest if data else '' }}"
+placeholder="Chest (cm)"
+title="Enter chest size between 50–200 cm"
+required>
+
+<input type="number" step="any" min="15" max="80"
+name="arms"
+value="{{ data.arms if data else '' }}"
+placeholder="Arms (cm)"
+title="Enter arm size between 15–80 cm"
+required>
+
+<input type="number" step="any" min="60" max="200"
+name="shoulders"
+value="{{ data.shoulders if data else '' }}"
+placeholder="Shoulders (cm)"
+title="Enter shoulder size between 60–200 cm"
+required>
+
+</div>
+
+<div class="right-section">
+
+<h3>Lower Body</h3>
+
+<input type="number" step="any" min="40" max="200"
+name="waist"
+value="{{ data.waist if data else '' }}"
+placeholder="Waist (cm)"
+title="Enter waist between 40–200 cm"
+required>
+
+<input type="number" step="any" min="50" max="200"
+name="hip"
+value="{{ data.hip if data else '' }}"
+placeholder="Hip (cm)"
+title="Enter hip between 50–200 cm"
+required>
+
+<input type="number" step="any" min="50" max="200"
+name="high_hip"
+value="{{ data.high_hip if data else '' }}"
+placeholder="High Hip (cm)"
+title="Enter high hip between 50–200 cm"
+required>
+
+<input type="number" step="any" min="30" max="120"
+name="thighs"
+value="{{ data.thighs if data else '' }}"
+placeholder="Thighs (cm)"
+title="Enter thighs between 30–120 cm"
+required>
+
+<h3>Unit Converter</h3>
+
+<input type="number" step="any" id="kg" placeholder="Kg">
+<button type="button" class="convert-btn" onclick="kgToLbs()">Convert to Lbs</button>
+
+<input type="number" step="any" id="lbs" placeholder="Lbs">
+<button type="button" class="convert-btn" onclick="lbsToKg()">Convert to Kg</button>
+
+<input type="number" step="any" id="cm" placeholder="Cm">
+<button type="button" class="convert-btn" onclick="cmToFeet()">Convert to Ft/In</button>
+
+<input type="text" id="feet" placeholder="5 ft 7 in">
+<button type="button" class="convert-btn" onclick="feetToCm()">Convert to Cm</button>
+
+</div>
+
+</form>
+
+</div>
+
+<a href="/personal" class="nav-btn prev-btn">← Previous</a>
+
+<button type="submit" form="bodyForm" class="nav-btn next-btn">
+Save & Next →
+</button>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>

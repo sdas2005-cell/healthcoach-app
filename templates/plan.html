@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<title>AI Diet & Exercise Plan</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/plan.css') }}">
+
+</head>
+
+<body>
+
+<h1 class="title">Personalized Diet & Exercise Plan</h1>
+
+<!-- =========================
+     FORM
+========================= -->
+<form method="POST" class="main-container" id="planForm">
+
+<h2>🍽 Diet Preferences</h2>
+
+<select name="diet_type" required>
+<option value="" disabled selected {% if not request.form.get("diet_type") %}selected{% endif %}>Select Diet Type</option>
+<option value="veg" {% if request.form.get("diet_type") == "veg" %}selected{% endif %}>Vegetarian</option>
+<option value="nonveg" {% if request.form.get("diet_type") == "nonveg" %}selected{% endif %}>Non-Vegetarian</option>
+</select>
+
+<select name="cuisine" required>
+<option value="" disabled selected {% if not request.form.get("cuisine") %}selected{% endif %}>Select Cuisine</option>
+<option value="indian"  {% if request.form.get("cuisine") == "indian" %}selected{% endif %}>Indian</option>
+<option value="mediterranean" {% if request.form.get("cuisine") == "mediterranean" %}selected{% endif %}>Mediterranean</option>
+</select>
+
+<select name="diet_duration" required>
+<option value="" disabled selected {% if not request.form.get("diet_duration") %}selected{% endif %}>Diet Duration</option>
+<option value="day" {% if request.form.get("diet_duration") == "day" %}selected{% endif %}>1 Day Plan</option>
+<option value="week" {% if request.form.get("diet_duration") == "week" %}selected{% endif %}>7 Days Plan</option>
+</select>
+
+<h2>💪 Exercise Preferences</h2>
+
+<select name="exercise_duration" required>
+<option value="" disabled selected {% if not request.form.get("exercise_duration") %}selected{% endif %}>Exercise Duration</option>
+<option value="day" {% if request.form.get("exercise_duration") == "day" %}selected{% endif %}>1 Day Plan</option>
+<option value="week" {% if request.form.get("exercise_duration") == "week" %}selected{% endif %}>7 Days Plan</option>
+</select>
+
+<button type="submit" class="generate-btn">
+Generate Personalized Plan →
+</button>
+
+</form>
+
+<!-- LOADER -->
+<div id="loader" class="loader">
+    🤖 Generating your smart plan... Please wait
+</div>
+
+
+<!-- =========================
+     RESULT
+========================= -->
+{% if show_result %}
+
+<div class="result-container">
+
+<h2>🔥 Your Smart AI Plan</h2>
+
+<!-- CALORIES -->
+<div class="card">
+<h3>🎯 Daily Calorie Target</h3>
+<p class="value">{{ calories }} kcal</p>
+
+<p class="info-text">
+Split: 30% Breakfast • 40% Lunch • 10% Snack • 20% Dinner
+</p>
+
+{% if macros %}
+<p class="info-text">
+Macros: 💪 {{ macros.protein }}g Protein • 🍞 {{ macros.carbs }}g Carbs • 🥑 {{ macros.fats }}g Fats
+</p>
+{% endif %}
+
+<p class="info-text">
+Goal: {{ goal.replace('_',' ') }} • {{ calories }} kcal/day
+</p> 
+
+</div>
+
+
+<!-- DIET -->
+<div class="card">
+<h3>🍽 Diet Plan</h3>
+
+{% if diet_duration == "day" %}
+{% for meal, data in meals.items() %}
+<div class="meal-box">
+<h4>{{ meal }}</h4>
+<p><b>{{ data.name }}</b></p>
+<p class="macro-line">
+🔥 {{ data.calories }} kcal |
+💪 {{ data.protein }}g |
+🍞 {{ data.carbs }}g |
+🥑 {{ data.fats }}g
+</p>
+</div>
+{% endfor %}
+
+{% else %}
+{% for day, plan in meals.items() %}
+<div class="day-box">
+
+<h3 class="day-title">{{ day }}</h3>
+
+{% for meal, data in plan.items() %}
+<div class="meal-box">
+<h4>{{ meal }}</h4>
+<p><b>{{ data.name }}</b></p>
+<p class="macro-line">
+🔥 {{ data.calories }} kcal |
+💪 {{ data.protein }}g |
+🍞 {{ data.carbs }}g |
+🥑 {{ data.fats }}g
+</p>
+</div>
+{% endfor %}
+
+</div>
+{% endfor %}
+{% endif %}
+
+</div>
+
+
+<!-- EXERCISE -->
+<div class="card">
+<h3>💪 Exercise Plan</h3>
+
+{% if exercise_duration == "day" %}
+<ul>
+{% for ex in exercise_plan %}
+<li>{{ ex }}</li>
+{% endfor %}
+</ul>
+
+{% else %}
+{% for day, exercises in exercise_plan.items() %}
+<div class="day-box">
+<h4>{{ day }}</h4>
+<ul>
+{% for ex in exercises %}
+<li>{{ ex }}</li>
+{% endfor %}
+</ul>
+</div>
+{% endfor %}
+{% endif %}
+
+</div>
+
+
+<!-- SMART TIPS -->
+<div class="card highlight ai-box">
+
+<h3>💡 Smart Health Tips</h3>
+
+{% if tips %}
+<ul>
+{% for tip in tips %}
+<li>{{ tip }}</li>
+{% endfor %}
+</ul>
+{% else %}
+<p>No tips available</p>
+{% endif %}
+
+<p class="ai-note">
+⚠️ These tips are generated using rule-based logic for guidance.
+</p>
+
+</div>
+
+<!-- RESTRICTED -->
+<div class="card highlight">
+<h3>🚫 Foods to Avoid</h3>
+
+<ul>
+{% for food in restricted_foods %}
+<li>{{ food }}</li>
+{% endfor %}
+</ul>
+
+</div>
+
+
+<!-- SUMMARY -->
+<div class="card summary-box">
+<h3>🧠 Plan Summary</h3>
+
+<p class="summary-text">{{ summary }}</p>
+
+<ul class="summary-list">
+<li>Calorie intake is personalized.</li>
+<li>Meals are goal-based and condition-aware.</li>
+<li>Variety ensures sustainability.</li>
+</ul>
+
+</div>
+
+</div>
+
+{% endif %}
+
+
+<!-- NAV -->
+<div class="nav-container">
+<a href="/health_calculator" class="nav-btn">← Previous</a>
+<a href="/report" class="nav-btn">Generate Report →</a>
+</div>
+
+<script>
+document.getElementById("planForm").addEventListener("submit", function() {
+
+    document.getElementById("loader").style.display = "block";
+    document.getElementById("planForm").style.display = "none";
+
+    document.querySelector(".generate-btn").disabled = true;
+});
+
+window.onload = function() {
+
+    // 🔥 hide loader when page loads
+    document.getElementById("loader").style.display = "none";
+
+    const result = document.querySelector(".result-container");
+    if (result) {
+        result.scrollIntoView({ behavior: "smooth" });
+    }
+};
+</script>
+
+</body>
+</html>

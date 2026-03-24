@@ -1,0 +1,179 @@
+/* RESET */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #f5f7fb;
+}
+
+/* HEADER */
+.title {
+    font-size: 26px;
+    font-weight: bold;
+    padding: 20px;
+    background: white;
+    border-bottom: 1px solid #ddd;
+}
+
+/* LAYOUT */
+.dashboard {
+    display: flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: #1e293b;
+    color: white;
+    padding: 20px;
+    position: fixed;
+}
+
+.sidebar h2 {
+    margin-bottom: 5px;
+}
+
+.sidebar p {
+    font-size: 14px;
+    color: #ccc;
+}
+
+.sidebar a {
+    display: block;
+    margin-top: 15px;
+    color: #cbd5f5;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    color: white;
+}
+
+/* MAIN CONTENT */
+.main {
+    margin-left: 270px;
+    padding: 30px;
+    width: 100%;
+}
+
+/* CARD */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+/* CIRCLE */
+.circle-container {
+    position: relative;
+    width: 150px;
+    margin: auto;
+}
+
+.circle-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* BADGES */
+.badges {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.badge {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.badge.active {
+    background: #6366f1;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* JOURNAL */
+textarea {
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background: #6366f1;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* =========================
+   JOURNAL SECTION
+========================= */
+
+.journal-entry {
+    background: #f1f5f9;
+    padding: 12px;
+    border-radius: 10px;
+    margin-top: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.journal-entry p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.journal-entry small {
+    color: #666;
+    font-size: 12px;
+}
+
+/* =========================
+   EMOJI BAR
+========================= */
+
+.emoji-bar {
+    margin-top: 10px;
+}
+
+.emoji-bar button {
+    margin: 4px;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    background: #eee;
+    padding: 6px 10px;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+.emoji-bar button:hover {
+    background: #6366f1;
+    color: white;
+    transform: scale(1.1);
+}

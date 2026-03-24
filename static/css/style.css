@@ -1,0 +1,171 @@
+body {
+
+    margin: 0;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    font-family: 'Poppins', sans-serif;
+
+    background: linear-gradient(
+        135deg,
+        #ff512f,
+        #dd2476,
+        #ff9966,
+        #ff5e62
+    );
+
+    background-size: 400% 400%;
+    animation: sunsetAnimation 12s ease infinite;
+
+    position: relative;
+}
+
+@keyframes sunsetAnimation {
+
+    0% { background-position: 0% 50%; }
+
+    50% { background-position: 100% 50%; }
+
+    100% { background-position: 0% 50%; }
+
+}
+
+.bounce-logo {
+
+    width: 380px;
+
+    opacity: 0;
+
+    animation: logoBounce 1.5s ease forwards;
+
+    animation-delay: 0.5s;
+
+    display: block;
+}
+
+@keyframes logoBounce {
+
+    0% {
+        transform: translateY(-300px) scale(0.5);
+        opacity: 0;
+    }
+
+    40% {
+        transform: translateY(30px) scale(1.1);
+        opacity: 1;
+    }
+
+    60% {
+        transform: translateY(-15px) scale(0.95);
+    }
+
+    80% {
+        transform: translateY(5px) scale(1.02);
+    }
+
+    100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+
+}
+
+.statement {
+
+    margin-top: 30px;
+
+    font-size: 28px;
+
+    color: white;
+
+    font-family: 'Pacifico', cursive;
+
+    text-align: center;
+
+    opacity: 0;
+
+    animation: statementSlide 1.2s ease forwards;
+
+    animation-delay: 2.2s;
+}
+
+@keyframes statementSlide {
+
+    0% {
+        transform: translateY(80px);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+}
+
+.start-btn {
+
+    position: fixed;
+
+    bottom: 40px;
+    right: 40px;
+
+    padding: 15px 35px;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    border-radius: 30px;
+
+    border: none;
+
+    background: white;
+
+    color: #dd2476;
+
+    cursor: pointer;
+
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+
+    opacity: 0;
+
+    animation: buttonPop 0.6s ease forwards;
+
+    animation-delay: 3.5s;
+
+    transition: all 0.3s ease;
+}
+
+@keyframes buttonPop {
+
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    70% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+}
+
+.start-btn:hover {
+
+    transform: scale(1.1);
+
+    background: #dd2476;
+
+    color: white;
+
+}

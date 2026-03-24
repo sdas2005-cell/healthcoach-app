@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+
+    <h2>HealthCoach</h2>
+
+    <div class="profile">
+        <h3>{{ user.name }}</h3>
+        <p>{{ user.email }}</p>
+    </div>
+
+    <div class="menu">
+        <a href="/personal">👤 Personal</a>
+        <a href="/body">📏 Body</a>
+        <a href="/activity">🎯 Goal</a>
+        <a href="/plan">🍽 Plan</a>
+        <a href="/download_progress">📄 Download PDF</a>
+        <a href="#" onclick="confirmLogout()">🚪 Logout</a>
+    </div>
+
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+    <h1 class="page-title">Dashboard</h1>
+
+    <!-- TOP GRID -->
+    <div class="grid">
+
+        <!-- GOAL PROGRESS -->
+        <div class="card center">
+
+            <h2>Goal Progress</h2>
+
+            <div class="circle-container">
+                <svg width="160" height="160">
+
+                    <circle cx="80" cy="80" r="70"
+                    stroke="#eee" stroke-width="12" fill="none"/>
+
+                    <circle cx="80" cy="80" r="70"
+                    stroke="#6366f1" stroke-width="12"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-dasharray="440"
+                    stroke-dashoffset="{{ 440 - (440 * percent / 100) }}"
+                    transform="rotate(-90 80 80)"/>
+
+                </svg>
+
+                <div class="circle-text">{{ percent }}%</div>
+            </div>
+
+            <div class="stats">
+                <p>Start: {{ start }} kg</p>
+                <p>Current: {{ current }} kg</p>
+                <p>Target: {{ target }} kg</p>
+            </div>
+
+        </div>
+
+        <!-- MILESTONES -->
+        <div class="card">
+
+            <h2>Milestones</h2>
+
+            <div class="badges">
+                <div class="badge {% if percent >= 25 %}active{% endif %}">25%</div>
+                <div class="badge {% if percent >= 50 %}active{% endif %}">50%</div>
+                <div class="badge {% if percent >= 100 %}active{% endif %}">100%</div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- CHARTS -->
+    <div class="card">
+        <h2>Weight Progress</h2>
+        <canvas id="weightChart"></canvas>
+    </div>
+
+    <div class="card">
+        <h2>Body Measurements</h2>
+        <canvas id="bodyChart"></canvas>
+    </div>
+
+    <!-- JOURNAL -->
+    <div class="card">
+    <h2>📝 Journal</h2>
+
+    <!-- FORM -->
+    <form method="POST" action="/journal">
+
+    <textarea name="entry" placeholder="Write your thoughts... 😊"></textarea>
+
+    <!-- EMOJIS -->
+    <div class="emoji-bar">
+    <button type="button" onclick="addEmoji('😊')">😊</button>
+    <button type="button" onclick="addEmoji('💪')">💪</button>
+    <button type="button" onclick="addEmoji('🔥')">🔥</button>
+    <button type="button" onclick="addEmoji('😴')">😴</button>
+    <button type="button" onclick="addEmoji('😢')">😢</button>
+    <button type="button" onclick="addEmoji('🥗')">🥗</button>
+    <button type="button" onclick="addEmoji('🏃')">🏃</button>
+    <button type="button" onclick="addEmoji('❤️')">❤️</button>
+    <button type="button" onclick="addEmoji('😎')">😎</button>
+    <button type="button" onclick="addEmoji('🤩')">🤩</button>
+    </div>
+
+    <button type="submit">Save Entry</button>
+
+    </form>
+
+    <hr>
+
+    <h3>📖 Your Entries</h3>
+ 
+    {% if journal_entries %}
+
+        {% for entry in journal_entries[::-1] %}
+        <div class="journal-entry">
+
+            <p>{{ entry.text }}</p>
+
+            <small>
+                {{ entry.date.strftime("%d %b %Y %H:%M") }}
+            </small>
+
+            <br>
+
+            <a href="/delete_entry/{{ loop.index0 }}">🗑 Delete</a>
+
+        </div>
+        {% endfor %}
+
+    {% else %}
+        <p>No entries yet.</p>
+    {% endif %}
+
+    </div>
+
+</div>
+
+</div>
+
+<!-- =========================
+     CHART JS
+========================= -->
+<script>
+
+new Chart(document.getElementById("weightChart"), {
+    type: "line",
+    data: {
+        labels: {{ dates | tojson }},
+        datasets: [{
+            label: "Weight",
+            data: {{ weights | tojson }},
+            borderColor: "#6366f1",
+            borderWidth: 3,
+            tension: 0.4,
+            fill: true,
+            backgroundColor: "rgba(99,102,241,0.1)"
+        }]
+    }
+});
+
+new Chart(document.getElementById("bodyChart"), {
+    type: "line",
+    data: {
+        labels: {{ dates | tojson }},
+        datasets: [
+            {label:"Waist", data: {{ waist | tojson }}, borderColor:"#3b82f6"},
+            {label:"Chest", data: {{ chest | tojson }}, borderColor:"#ef4444"},
+            {label:"Hips", data: {{ hips | tojson }}, borderColor:"#f59e0b"},
+            {label:"Arms", data: {{ arms | tojson }}, borderColor:"#10b981"}
+        ]
+    }
+});
+
+</script>
+
+<!-- LOGOUT -->
+<script>
+function confirmLogout() {
+    if (confirm("Are you sure you want to logout?")) {
+        window.location.href = "/logout";
+    }
+}
+</script>
+
+<script>
+function addEmoji(emoji) {
+    let textarea = document.querySelector("textarea[name='entry']");
+    textarea.value += emoji;
+}
+</script>
+
+</body>
+</html>

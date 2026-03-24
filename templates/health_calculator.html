@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<title>Health Calculator</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/calculator.css') }}">
+
+</head>
+
+<body>
+
+<h1 class="title">Your Health Analysis</h1>
+
+<div class="main-container">
+
+<!-- LEFT SIDE -->
+<div class="left">
+
+<h2>Health Insights</h2>
+
+<!-- BMI -->
+<div class="card">
+<h3>📊 Body Mass Index (BMI)</h3>
+
+<p class="value" style="color: {{ bmi_color }}">
+{{ bmi }} ({{ bmi_status }})
+</p>
+
+<div class="bmi-scale">
+<div class="bmi-progress"
+style="width: {{ (bmi/40)*100 }}%; background: {{ bmi_color }};">
+</div>
+</div>
+
+<p class="desc">
+BMI evaluates whether your body weight is proportionate to your height, helping identify overall fitness level.
+</p>
+</div>
+
+<!-- BMR -->
+<div class="card">
+<h3>🔥 Basal Metabolic Rate (BMR)</h3>
+<p class="value">{{ bmr }} kcal/day</p>
+
+<p class="desc">
+This represents the minimum energy your body requires to sustain vital functions such as breathing, circulation, and cell production at rest.
+</p>
+</div>
+
+<!-- TDEE -->
+<div class="card">
+<h3>⚡ Total Daily Energy Expenditure (TDEE)</h3>
+<p class="value">{{ tdee }} kcal/day</p>
+
+<p class="desc">
+TDEE reflects your complete daily calorie burn, including physical activity, and is essential for planning diet goals.
+</p>
+</div>
+
+<!-- CALORIES -->
+<div class="card">
+<h3>🍽 Recommended Calorie Intake</h3>
+
+<p class="value" style="color: {{ cal_color }}">
+{{ calories }} kcal ({{ cal_status }})
+</p>
+
+<p class="desc">
+Your personalized calorie target based on your fitness goal, whether fat loss, muscle gain, or maintenance.
+</p>
+</div>
+
+<!-- MACROS -->
+<div class="card">
+<h3>💪 Macronutrient Distribution</h3>
+<ul>
+<li>Protein: {{ protein }}g</li>
+<li>Carbohydrates: {{ carbs }}g</li>
+<li>Fats: {{ fats }}g</li>
+</ul>
+
+<p class="desc">
+Protein supports muscle repair, carbohydrates provide energy, and fats regulate hormones and overall health.
+</p>
+</div>
+
+<!-- WATER -->
+<div class="card">
+<h3>💧 Daily Water Requirement</h3>
+<p class="value">{{ water }} Liters/day</p>
+
+<p class="desc">
+Maintaining hydration improves metabolism, digestion, and overall physiological performance.
+</p>
+</div>
+
+<!-- BODY FAT -->
+<div class="card">
+<h3>🧪 Body Fat Percentage</h3>
+<p class="value">{{ body_fat }}%</p>
+
+<p class="desc">
+Indicates the proportion of fat in your body. Lower levels suggest lean composition, while higher levels indicate fat accumulation.
+</p>
+</div>
+
+<!-- WHR -->
+<div class="card">
+<h3>📐 Waist-to-Hip Ratio</h3>
+<p class="value">{{ whr }}</p>
+
+<p class="desc">
+A key indicator of fat distribution. Higher ratios may suggest increased risk of lifestyle-related health conditions.
+</p>
+</div>
+
+<!-- SUGGESTION -->
+<div class="card highlight">
+<h3>💡 Health Recommendation</h3>
+<p>{{ suggestion }}</p>
+</div>
+
+</div>
+
+<!-- RIGHT SIDE -->
+<div class="right">
+
+<h2>Know Your Body</h2>
+
+<!-- BODY TYPE -->
+<div class="card">
+
+<h3>🧬 Body Type Classification</h3>
+
+<p class="value 
+{% if body_type == 'Endomorph' %}endomorph
+{% elif body_type == 'Mesomorph' %}mesomorph
+{% else %}ectomorph{% endif %}">
+{{ body_type }}
+</p>
+
+<p class="desc">
+{% if body_type == "Ectomorph" %}
+Characterized by a lean physique, fast metabolism, and difficulty gaining weight or muscle mass. Focus on calorie surplus and resistance training.
+{% elif body_type == "Mesomorph" %}
+Naturally athletic build with efficient muscle growth and balanced metabolism. Ideal for both strength and endurance training.
+{% elif body_type == "Endomorph" %}
+Higher tendency to store fat with a slower metabolic rate. Best results achieved through calorie control, cardio, and structured strength training.
+{% endif %}
+</p>
+
+</div>
+
+<!-- BODY SHAPE -->
+<div class="card">
+
+<h3>📏 Body Shape Analysis</h3>
+
+<p class="value">{{ body_shape }}</p>
+
+<p class="desc">
+{% if body_shape == "Rectangle" %}
+Your body has evenly distributed proportions, giving a straight and balanced appearance.
+{% elif body_shape == "Pear" %}
+Your lower body is more prominent than your upper body, indicating fat distribution around hips and thighs.
+{% else %}
+Your upper body is broader than your lower body, often indicating strength concentration in shoulders and chest.
+{% endif %}
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- BUTTONS -->
+<a href="/activity" class="nav-btn prev-btn">← Previous</a>
+<a href="/plan" class="nav-btn next-btn">View Diet & Exercise Plan →</a>
+
+</body>
+</html>

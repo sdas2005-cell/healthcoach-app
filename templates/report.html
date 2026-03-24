@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<title>Health Report</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/report.css') }}">
+
+</head>
+
+<body>
+
+<h1 class="title">Your Complete Health Report</h1>
+
+<div class="report-container" id="reportContent">
+
+<!-- =========================
+     PERSONAL DETAILS
+========================= -->
+<div class="card">
+<h2>👤 Personal Details</h2>
+
+<p><b>Name:</b> {{ personal.name }}</p>
+<p><b>Age:</b> {{ personal.age }}</p>
+<p><b>Gender:</b> {{ personal.gender }}</p>
+<p><b>Allergies:</b> {{ personal.allergies | join(', ') }}</p>
+<p><b>Conditions:</b> {{ personal.conditions | join(', ') }}</p>
+<p><b>Medicine:</b> {{ personal.medicine }} {{ personal.medicine_name }}</p>
+
+</div>
+
+<!-- =========================
+     BODY
+========================= -->
+<div class="card">
+<h2>📏 Body Measurements</h2>
+
+<p>Weight: {{ body.weight }} kg</p>
+<p>Height: {{ body.height }} cm</p>
+<p>Waist: {{ body.waist }} cm</p>
+<p>Hip: {{ body.hip }} cm</p>
+
+</div>
+
+<!-- =========================
+     ACTIVITY
+========================= -->
+<div class="card">
+<h2>🏃 Activity & Goal</h2>
+
+<p>Activity Level: {{ activity.activity_level }}</p>
+<p>Goal: {{ activity.goal }}</p>
+
+</div>
+
+<!-- =========================
+     AI RESULTS
+========================= -->
+<div class="card">
+<h2>📊 AI Health Analysis</h2>
+
+<p><b>BMI:</b> {{ bmi }} → Body weight vs height indicator</p>
+
+<p><b>BMR:</b> {{ bmr }} kcal  
+→ Energy required at rest</p>
+
+<p><b>TDEE:</b> {{ tdee }} kcal  
+→ Total daily calorie burn</p>
+
+<p><b>Calories:</b> {{ calories }} kcal  
+→ Recommended intake</p>
+
+<p><b>Macros:</b>  
+Protein: {{ protein }}g | Carbs: {{ carbs }}g | Fats: {{ fats }}g</p>
+
+<p><b>Water:</b> {{ water }} L/day</p>
+
+<p><b>Body Fat:</b> {{ body_fat }}%</p>
+<p><b>WHR:</b> {{ whr }}</p>
+
+<p><b>Body Type:</b> {{ body_type }}</p>
+<p><b>Body Shape:</b> {{ body_shape }}</p>
+
+<p><b>AI Suggestion:</b> {{ suggestion }}</p>
+
+</div>
+
+<!-- =========================
+     DIET
+========================= -->
+<div class="card">
+<h2>🍽 Diet Plan</h2>
+
+{% for day, meals_day in meals.items() %}
+    <h3>{{ day }}</h3>
+
+    {% for meal_type, food in meals_day.items() %}
+        <p><b>{{ meal_type }}:</b> {{ food }}</p>
+    {% endfor %}
+
+{% endfor %}
+
+</div>
+
+<!-- =========================
+     EXERCISE
+========================= -->
+<div class="card">
+<h2>💪 Exercise Plan</h2>
+
+{% if exercise is mapping %}
+    {% for day, ex_list in exercise.items() %}
+        <h3>{{ day }}</h3>
+        <ul>
+        {% for ex in ex_list %}
+            <li>{{ ex }}</li>
+        {% endfor %}
+        </ul>
+    {% endfor %}
+{% else %}
+    <ul>
+    {% for ex in exercise %}
+        <li>{{ ex }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+
+</div>
+
+<!-- =========================
+     TIPS
+========================= -->
+<div class="card highlight">
+<h2>🤖 AI Tips</h2>
+
+<ul>
+{% for tip in tips %}
+<li>{{ tip }}</li>
+{% endfor %}
+</ul>
+
+</div>
+
+<!-- =========================
+     DOWNLOAD BUTTON
+========================= -->
+<div class="download-section">
+<a href="/download_report" class="download-btn">
+Download Report 📄
+</a>
+</div>
+
+</div>
+
+<!-- =========================
+     NAVIGATION BUTTONS
+========================= -->
+<a href="/plan?from=report" class="nav-btn prev-btn">← Previous</a>
+<a href="{{ url_for('dashboard') }}" class="nav-btn next-btn">
+Next →
+</a>
+
+</body>
+</html>

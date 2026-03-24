@@ -1,0 +1,163 @@
+/* =========================
+   BACKGROUND
+========================= */
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    font-family: 'Poppins', sans-serif;
+
+    background: linear-gradient(
+        135deg,
+        #ff512f,
+        #dd2476,
+        #ff9966,
+        #ff5e62
+    );
+
+    background-size: 400% 400%;
+    animation: sunsetAnimation 12s ease infinite;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@keyframes sunsetAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* =========================
+   TITLE
+========================= */
+.title {
+    color: white;
+    font-size: 38px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+.report-container {
+    width: 85vw;
+    margin-top: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* =========================
+   CARDS
+========================= */
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* Highlight Card */
+.highlight {
+    border-left: 6px solid #dd2476;
+    background: linear-gradient(135deg, #ffe3ec, #fff);
+}
+
+/* =========================
+   TEXT
+========================= */
+h2 {
+    color: #dd2476;
+    margin-bottom: 10px;
+}
+
+p {
+    margin: 6px 0;
+    color: #333;
+}
+
+/* =========================
+   DOWNLOAD BUTTON
+========================= */
+.download-section {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.download-btn {
+    padding: 15px 40px;
+
+    background: white;
+    color: #dd2476;
+
+    border-radius: 30px;
+    text-decoration: none;
+
+    font-weight: bold;
+
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+
+    transition: 0.3s;
+}
+
+.download-btn:hover {
+    background: #dd2476;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* =========================
+   NAV BUTTONS
+========================= */
+.nav-btn {
+    position: fixed;
+    bottom: 25px;
+
+    padding: 15px 30px;
+
+    background: white;
+    color: #dd2476;
+
+    border-radius: 30px;
+    text-decoration: none;
+
+    font-weight: bold;
+
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+
+    transition: 0.3s;
+}
+
+.nav-btn:hover {
+    background: #dd2476;
+    color: white;
+    transform: scale(1.05);
+}
+
+.prev-btn {
+    left: 30px;
+}
+
+.next-btn {
+    right: 30px;
+}
+
+@media print {
+
+    .download-section,
+    .nav-btn {
+        display: none;
+    }
+
+}

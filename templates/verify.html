@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Verify OTP</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+
+<body>
+<div class="container">
+
+<h2>Enter OTP</h2>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category, message in messages %}
+    <p class="{{ category }}">{{ message }}</p>
+  {% endfor %}
+{% endwith %}
+
+<form method="POST">
+<input type="text" name="otp" placeholder="Enter OTP" required>
+<button type="submit">Verify</button>
+</form>
+
+</div>
+</body>
+</html>

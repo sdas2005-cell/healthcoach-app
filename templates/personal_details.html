@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>Personal Details - HealthCoach</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/personal.css') }}">
+</head>
+
+<script>
+    const messages = {{ get_flashed_messages() | tojson }};
+    if (messages.length > 0) {
+        alert(messages[0]);
+    }
+</script>
+
+<body>
+
+<h1 class="title">Personal Details</h1>
+
+<div class="page-layout">
+
+<form method="POST" class="main-container" id="personalForm">
+
+<!-- LEFT SECTION -->
+<div class="left-section">
+
+<input type="text" name="name" placeholder="Full Name"
+value="{{ data.name if data else '' }}" required>
+
+<input type="number" name="age" placeholder="Age"
+value="{{ data.age if data else '' }}" required>
+
+<label>Date of Birth</label>
+<input type="date" name="dob"
+value="{{ data.dob if data else '' }}" required>
+
+<label>Gender</label>
+<select name="gender" required>
+<option value="">Select Gender</option>
+
+<option value="Male" {% if data and data.gender == "Male" %}selected{% endif %}>Male</option>
+<option value="Female" {% if data and data.gender == "Female" %}selected{% endif %}>Female</option>
+<option value="Other" {% if data and data.gender == "Other" %}selected{% endif %}>Other</option>
+
+</select>
+
+<!-- ALLERGIES -->
+<h3>Allergies</h3>
+
+<div class="checkbox-group">
+
+<label>
+<input type="checkbox" name="allergies" value="Peanuts"
+{% if data and data.allergies and 'Peanuts' in data.allergies %}checked{% endif %}>
+<span>Peanuts</span>
+</label>
+
+<label>
+<input type="checkbox" name="allergies" value="Dairy"
+{% if data and data.allergies and 'Dairy' in data.allergies %}checked{% endif %}>
+<span>Dairy</span>
+</label>
+
+<label>
+<input type="checkbox" name="allergies" value="Gluten"
+{% if data and data.allergies and 'Gluten' in data.allergies %}checked{% endif %}>
+<span>Gluten</span>
+</label>
+
+<label>
+<input type="checkbox" name="allergies" value="Soy"
+{% if data and data.allergies and 'Soy' in data.allergies %}checked{% endif %}>
+<span>Soy</span>
+</label>
+
+<label>
+<input type="checkbox" name="allergies" value="Seafood"
+{% if data and data.allergies and 'Seafood' in data.allergies %}checked{% endif %}>
+<span>Seafood</span>
+</label>
+
+<label>
+<input type="checkbox" name="allergies" value="None"
+{% if data and data.allergies and 'None' in data.allergies %}checked{% endif %}>
+<span>None</span>
+</label>
+
+</div>
+
+<input
+type="text"
+name="allergy_description"
+value="{{ data.allergy_description if data else '' }}"
+placeholder="Describe your allergies (optional)">
+
+</div>
+
+
+<!-- RIGHT SECTION -->
+<div class="right-section">
+
+<!-- HEALTH CONDITION -->
+<h3>Health Condition</h3>
+
+<div class="checkbox-group">
+
+<label>
+<input type="checkbox" name="conditions" value="Diabetes"
+{% if data and data.conditions and 'Diabetes' in data.conditions %}checked{% endif %}>
+<span>Diabetes</span>
+</label>
+
+<label>
+<input type="checkbox" name="conditions" value="Blood Pressure"
+{% if data and data.conditions and 'Blood Pressure' in data.conditions %}checked{% endif %}>
+<span>Blood Pressure</span>
+</label>
+
+<label>
+<input type="checkbox" name="conditions" value="Thyroid"
+{% if data and data.conditions and 'Thyroid' in data.conditions %}checked{% endif %}>
+<span>Thyroid</span>
+</label>
+
+<label>
+<input type="checkbox" name="conditions" value="PCOS"
+{% if data and data.conditions and 'PCOS' in data.conditions %}checked{% endif %}>
+<span>PCOS</span>
+</label>
+
+<label>
+<input type="checkbox" name="conditions" value="Cholesterol"
+{% if data and data.conditions and 'Cholesterol' in data.conditions %}checked{% endif %}>
+<span>Cholesterol</span>
+</label>
+
+<label>
+<input type="checkbox" name="conditions" value="Asthma"
+{% if data and data.conditions and 'Asthma' in data.conditions %}checked{% endif %}>
+<span>Asthma</span>
+</label>
+
+<label>
+<input type="checkbox" name="conditions" value="None"
+{% if data and data.conditions and 'None' in data.conditions %}checked{% endif %}>
+<span>None</span>
+</label>
+
+</div>
+
+<!-- ADDITIONAL NOTES -->
+<h3>Additional Health Notes (Optional)</h3>
+
+<input
+type="text"
+name="condition_description"
+value="{{ data.condition_description if data else '' }}"
+placeholder="Any other condition (e.g., migraine, iron deficiency)">
+
+<p class="note">
+⚠️ This information is used only for general guidance and AI tips. It may not directly affect your diet or exercise plan.
+</p>
+
+
+<!-- MEDICINE -->
+<h3>Are you taking any medicine?</h3>
+
+<label>
+<input type="radio" name="medicine" value="Yes" id="medYes"
+{% if data and data.medicine == "Yes" %}checked{% endif %} required> Yes
+</label>
+
+<label>
+<input type="radio" name="medicine" value="No" id="medNo"
+{% if data and data.medicine == "No" %}checked{% endif %}> No
+</label>
+
+<input
+type="text"
+id="medicineBox"
+name="medicine_name"
+value="{{ data.medicine_name if data else '' }}"
+placeholder="Please name the medicine you are taking"
+style="display:none;"
+>
+
+</div>
+
+</form>
+
+<!-- BUTTON -->
+<button type="submit" form="personalForm" class="save-btn">
+Save & Next →
+</button>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>

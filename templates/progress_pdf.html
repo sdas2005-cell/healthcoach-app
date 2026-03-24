@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+h1 {
+    color: #dd2476;
+    text-align: center;
+}
+
+.section {
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+.highlight {
+    color: #dd2476;
+    font-weight: bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Health Progress Report</h1>
+
+<div class="section">
+<p><b>Name:</b> {{ user.name }}</p>
+<p><b>Email:</b> {{ user.email }}</p>
+</div>
+
+<div class="section">
+<h2>🎯 Goal Summary</h2>
+
+<p>Start Weight: {{ progress[0].weight if progress else 'N/A' }} kg</p>
+<p>Current Weight: {{ progress[-1].weight if progress else 'N/A' }} kg</p>
+<p>Target Weight: {{ user.activity.target_weight if user.activity else 'N/A' }} kg</p>
+
+</div>
+
+<div class="section">
+<h2>📊 Progress History</h2>
+
+<table>
+<tr>
+<th>Date</th>
+<th>Weight</th>
+<th>Waist</th>
+<th>Chest</th>
+<th>Hips</th>
+<th>Arms</th>
+</tr>
+
+{% for p in progress %}
+<tr>
+<td>{{ p.date.strftime("%d %b %Y") }}</td>
+<td>{{ p.weight }} kg</td>
+<td>{{ p.waist }}</td>
+<td>{{ p.chest }}</td>
+<td>{{ p.hips }}</td>
+<td>{{ p.arms }}</td>
+</tr>
+{% endfor %}
+
+</table>
+</div>
+
+<div class="section">
+<h2>💡 Summary</h2>
+
+<p>
+{% if progress|length > 1 %}
+You have 
+{% if progress[-1].weight < progress[0].weight %}
+<span class="highlight">lost weight</span> — great progress!
+{% else %}
+<span class="highlight">gained weight</span> — adjust your plan.
+{% endif %}
+{% else %}
+Start tracking your progress to see improvements.
+{% endif %}
+</p>
+
+</div>
+
+</body>
+</html>

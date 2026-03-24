@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>HealthCoach</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&family=Pacifico&display=swap" rel="stylesheet">
+
+    <!-- CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+
+    <!-- LOGO -->
+    <img src="{{ url_for('static', filename='images/new_logo.png') }}"
+         class="bounce-logo"
+         alt="HealthCoach Logo">
+
+
+
+    <!-- STATEMENT -->
+    <h2 class="statement">
+
+        First step of making Better choices, for better life
+
+    </h2>
+
+
+
+    <!-- BUTTON -->
+    <button class="start-btn" >
+
+        Let's Get Started →
+
+    </button>
+
+
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+
+</body>
+
+</html>
