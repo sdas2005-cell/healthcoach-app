@@ -1511,7 +1511,8 @@ def forgot():
                 msg["From"] = sender_email
                 msg["To"] = email
 
-                server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+                server = smtplib.SMTP("smtp-relay.brevo.com", 587)
+                server.starttls()
                 server.login(sender_email, app_password)
                 server.send_message(msg)
                 server.quit()
