@@ -1522,7 +1522,7 @@ def forgot():
 
             except Exception as e:
                 print("Email Error:", e)
-                flash("Error sending email", "error")
+                flash(f"Error sending email: {e}")
 
         else:
             flash("Email not found", "error")
