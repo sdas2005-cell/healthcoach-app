@@ -6,7 +6,6 @@ from flask import make_response
 from datetime import datetime
 
 import random
-import smtplib
 from email.mime.text import MIMEText
 import os
 import webbrowser
@@ -1501,21 +1500,28 @@ def forgot():
 
             try:
 
-                sender_email = os.getenv("EMAIL_USER")
-                app_password = os.getenv("EMAIL_PASS")
+                import requests
+                import os
 
-                
-                
-                msg = MIMEText(f"Your OTP is {otp}")
-                msg["Subject"] = "HealthCoach OTP"
-                msg["From"] = sender_email
-                msg["To"] = email
+                api_key = os.getenv("BREVO_API_KEY")
 
-                server = smtplib.SMTP("smtp-relay.brevo.com", 587)
-                server.starttls()
-                server.login(sender_email, app_password)
-                server.send_message(msg)
-                server.quit()
+                url = "https://api.brevo.com/v3/smtp/email"
+
+                headers = {
+                    "accept": "application/json",
+                    "api-key": api_key,
+                    "content-type": "application/json"
+                }
+
+                data = {
+                    "sender": {"email": "sonalipdas2005@gmail.com"},
+                    "to": [{"email": email}],
+                    "subject": "HealthCoach OTP",
+                    "htmlContent": f"<p>Your OTP is <b>{otp}</b></p>"
+                }
+
+                response = requests.post(url, json=data, headers=headers)
+                print(response.text)
 
                 flash("OTP sent to your email", "success")
                 return redirect("/verify")
