@@ -1511,8 +1511,7 @@ def forgot():
                 msg["From"] = sender_email
                 msg["To"] = email
 
-                server = smtplib.SMTP("smtp.gmail.com", 587)
-                server.starttls()
+                server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
                 server.login(sender_email, app_password)
                 server.send_message(msg)
                 server.quit()
