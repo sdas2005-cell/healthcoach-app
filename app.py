@@ -1500,8 +1500,9 @@ def forgot():
             session["otp"] = otp
 
             try:
-                sender_email = "sonalipdas2005@gmail.com"
-                app_password = os.getenv("EMAIL_PASSWORD")
+
+                sender_email = os.getenv("EMAIL_USER")
+                app_password = os.getenv("EMAIL_PASS")
 
                 
                 
