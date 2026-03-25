@@ -23,6 +23,7 @@ app.secret_key = os.getenv("SECRET_KEY", "dev_key")
 # MongoDB Connection
 # =========================
 mongo_uri = os.getenv("MONGO_URI")
+print("Mongo URI:", mongo_uri)
 
 if not mongo_uri:
     raise ValueError("❌ MONGO URI NOT FOUND. Please set it in environment variables.")
