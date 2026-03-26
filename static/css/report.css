@@ -154,10 +154,17 @@ p {
 }
 
 @media print {
-
-    .download-section,
-    .nav-btn {
-        display: none;
+    .no-pdf {
+        display: none !important;
     }
+}
 
+.icon {
+    margin-right: 6px;
+}
+
+@media print {
+    .icon {
+        display: none !important;
+    }
 }

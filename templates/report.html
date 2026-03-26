@@ -7,6 +7,22 @@
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/report.css') }}">
 
+<style>
+@media print {
+    .no-pdf {
+        display: none !important;
+    }
+}
+</style>
+
+<style>
+@media print {
+    .icon {
+        display: none !important;
+    }
+}
+</style>
+
 </head>
 
 <body>
@@ -19,7 +35,7 @@
      PERSONAL DETAILS
 ========================= -->
 <div class="card">
-<h2>👤 Personal Details</h2>
+<h2><span class="icon">👤</span> Personal Details</h2>
 
 <p><b>Name:</b> {{ personal.name }}</p>
 <p><b>Age:</b> {{ personal.age }}</p>
@@ -34,7 +50,7 @@
      BODY
 ========================= -->
 <div class="card">
-<h2>📏 Body Measurements</h2>
+<h2><span class="icon">📏</span> Body Measurements</h2>
 
 <p>Weight: {{ body.weight }} kg</p>
 <p>Height: {{ body.height }} cm</p>
@@ -47,7 +63,7 @@
      ACTIVITY
 ========================= -->
 <div class="card">
-<h2>🏃 Activity & Goal</h2>
+<h2><span class="icon">🏃</span> Activity & Goal</h2>
 
 <p>Activity Level: {{ activity.activity_level }}</p>
 <p>Goal: {{ activity.goal }}</p>
@@ -58,7 +74,7 @@
      AI RESULTS
 ========================= -->
 <div class="card">
-<h2>📊 AI Health Analysis</h2>
+<h2><span class="icon">📊</span> Health Analysis</h2>
 
 <p><b>BMI:</b> {{ bmi }} → Body weight vs height indicator</p>
 
@@ -82,7 +98,7 @@ Protein: {{ protein }}g | Carbs: {{ carbs }}g | Fats: {{ fats }}g</p>
 <p><b>Body Type:</b> {{ body_type }}</p>
 <p><b>Body Shape:</b> {{ body_shape }}</p>
 
-<p><b>AI Suggestion:</b> {{ suggestion }}</p>
+<p><b>Suggestion:</b> {{ suggestion }}</p>
 
 </div>
 
@@ -90,7 +106,7 @@ Protein: {{ protein }}g | Carbs: {{ carbs }}g | Fats: {{ fats }}g</p>
      DIET
 ========================= -->
 <div class="card">
-<h2>🍽 Diet Plan</h2>
+<h2><span class="icon">🍽</span> Diet Plan</h2>
 
 {% for day, meals_day in meals.items() %}
     <h3>{{ day }}</h3>
@@ -107,7 +123,7 @@ Protein: {{ protein }}g | Carbs: {{ carbs }}g | Fats: {{ fats }}g</p>
      EXERCISE
 ========================= -->
 <div class="card">
-<h2>💪 Exercise Plan</h2>
+<h2><span class="icon">💪</span> Exercise Plan</h2>
 
 {% if exercise is mapping %}
     {% for day, ex_list in exercise.items() %}
@@ -132,7 +148,7 @@ Protein: {{ protein }}g | Carbs: {{ carbs }}g | Fats: {{ fats }}g</p>
      TIPS
 ========================= -->
 <div class="card highlight">
-<h2>🤖 AI Tips</h2>
+<h2><span class="icon">🤖</span> Tips</h2>
 
 <ul>
 {% for tip in tips %}
@@ -145,7 +161,7 @@ Protein: {{ protein }}g | Carbs: {{ carbs }}g | Fats: {{ fats }}g</p>
 <!-- =========================
      DOWNLOAD BUTTON
 ========================= -->
-<div class="download-section">
+<div class="download-section no-pdf">
 <a href="/download_report" class="download-btn">
 Download Report 📄
 </a>
@@ -156,8 +172,9 @@ Download Report 📄
 <!-- =========================
      NAVIGATION BUTTONS
 ========================= -->
-<a href="/plan?from=report" class="nav-btn prev-btn">← Previous</a>
-<a href="{{ url_for('dashboard') }}" class="nav-btn next-btn">
+<a href="/plan?from=report" class="nav-btn prev-btn no-pdf">← Previous</a>
+
+<a href="{{ url_for('dashboard') }}" class="nav-btn next-btn no-pdf">
 Next →
 </a>
 
