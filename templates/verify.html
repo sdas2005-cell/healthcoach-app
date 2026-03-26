@@ -10,16 +10,72 @@
 
 <h2>Enter OTP</h2>
 
+<!-- FLASH MESSAGES -->
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% for category, message in messages %}
     <p class="{{ category }}">{{ message }}</p>
   {% endfor %}
 {% endwith %}
 
+<!-- OTP FORM -->
 <form method="POST">
-<input type="text" name="otp" placeholder="Enter OTP" required>
-<button type="submit">Verify</button>
+    <input type="text" name="otp" placeholder="Enter OTP" required>
+    <button type="submit">Verify</button>
 </form>
+
+<!-- RESEND BUTTON -->
+<form action="/resend-otp" method="POST" style="margin-top:10px;">
+    <button type="submit" class="resend-link" id="resendBtn" disabled>
+        Didn’t receive OTP? Resend
+    </button>
+</form>
+
+<!-- RESEND TIMER -->
+<p id="timer" style="font-size: 14px; color: gray;">
+    Resend available in 30s
+</p>
+
+<!-- OTP EXPIRY TIMER -->
+<p id="otp-expiry" style="font-size: 14px; color: gray;">
+    OTP expires in 120s
+</p>
+
+<script>
+/* =========================
+   RESEND TIMER (30s)
+========================= */
+let seconds = 30;
+let timer = document.getElementById("timer");
+let btn = document.getElementById("resendBtn");
+
+let resendCountdown = setInterval(function() {
+    seconds--;
+    timer.innerText = "Resend available in " + seconds + "s";
+
+    if (seconds <= 0) {
+        clearInterval(resendCountdown);
+        timer.innerText = "";
+        btn.disabled = false; // enable resend
+    }
+}, 1000);
+
+
+/* =========================
+   OTP EXPIRY TIMER (120s)
+========================= */
+let otpTime = 120;
+let otpTimer = document.getElementById("otp-expiry");
+
+let otpCountdown = setInterval(function() {
+    otpTime--;
+    otpTimer.innerText = "OTP expires in " + otpTime + "s";
+
+    if (otpTime <= 0) {
+        clearInterval(otpCountdown);
+        otpTimer.innerText = "OTP expired. Please resend.";
+    }
+}, 1000);
+</script>
 
 </div>
 </body>

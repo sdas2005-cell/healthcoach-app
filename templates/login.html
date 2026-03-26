@@ -16,9 +16,7 @@
 
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% for category, message in messages %}
-    {% if category == "error" %}
-      <p class="{{ category }}">{{ message }}</p>
-    {% endif %}
+    <p class="{{ category }}">{{ message }}</p>
   {% endfor %}
 {% endwith %}
 
@@ -43,6 +41,12 @@
 <a href="/signup">Create Account</a>
 
 </div>
-
+{% if next_page %}
+<script>
+    setTimeout(function() {
+        window.location.href = "{{ next_page }}";
+    }, 2000);
+</script>
+{% endif %}
 </body>
 </html>

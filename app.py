@@ -10,6 +10,7 @@ from email.mime.text import MIMEText
 import os
 import webbrowser
 import threading
+import time
 
 
 app = Flask(__name__)
@@ -57,15 +58,19 @@ def login():
 
             session["user"] = email
 
-            # 🔥 Smart routing
+            # 🔥 Decide next page
             if "personal" not in user:
-                return redirect("/personal")
+                next_page = "/personal"
             elif "body" not in user:
-                return redirect("/body")
+                next_page = "/body"
             elif "activity" not in user:
-                return redirect("/activity")
+                next_page = "/activity"
             else:
-                return redirect("/dashboard")
+                next_page = "/dashboard"
+
+            flash("Successfully logged in!", "success")
+
+            return render_template("login.html", next_page=next_page)
 
         else:
             flash("Invalid email or password", "error")
@@ -1497,6 +1502,7 @@ def forgot():
 
             session["reset_email"] = email
             session["otp"] = otp
+            session["otp_time"] = time.time()
 
             try:
 
@@ -1541,9 +1547,23 @@ def forgot():
 @app.route("/verify", methods=["GET","POST"])
 def verify():
 
+    if "reset_email" not in session:
+        return redirect("/forgot")
+
     if request.method == "POST":
 
-        if request.form["otp"] == session.get("otp"):
+        
+        entered_otp = request.form["otp"]
+        stored_otp = session.get("otp")
+        otp_time = session.get("otp_time")
+
+        # 🔥 Check expiry (2 minutes)
+        if not otp_time or time.time() - otp_time > 120:
+            flash("OTP expired. Please resend OTP.", "error")
+            return redirect("/verify")
+
+        # 🔥 Check OTP
+        if entered_otp == stored_otp:
             flash("OTP verified successfully", "success")
             return redirect("/reset")
         else:
@@ -1575,6 +1595,31 @@ def reset():
         return redirect("/login")
 
     return render_template("reset.html")
+
+# =========================
+# RESEND OTP
+# =========================
+@app.route("/resend-otp", methods=["POST"])
+def resend_otp():
+
+    email = session.get("reset_email")
+
+    if not email:
+        flash("Session expired. Please try again.", "error")
+        return redirect("/forgot")
+
+    import random
+    new_otp = str(random.randint(100000, 999999))
+
+    # Store new OTP
+    session["otp"] = new_otp
+    session["otp_time"] = time.time()
+
+    # Send email again
+    send_email(email, new_otp)
+
+    flash("OTP resent successfully!", "success")
+    return redirect("/verify")
 
 # =========================
 # LOGOUT
