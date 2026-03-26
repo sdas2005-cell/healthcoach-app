@@ -190,18 +190,23 @@ a:hover {
     }
 }
 
-/* Resend Link Style */
+/* =========================
+  RESEND LINK (FINAL FIX)
+========================= */
 .resend-link {
-    all: unset;  /* 🔥 removes default button styles */
-
     color: #dd2476;
     cursor: pointer;
     font-size: 14px;
-
-    display: inline;   /* important */
     text-decoration: underline;
 }
 
 .resend-link:hover {
     color: #ff512f;
+}
+
+/* Disabled state */
+.resend-link.disabled {
+    color: gray;
+    pointer-events: none;   /* 🔥 disables clicking */
+    text-decoration: none;
 }

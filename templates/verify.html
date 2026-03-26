@@ -24,10 +24,10 @@
 </form>
 
 <!-- RESEND BUTTON -->
-<form action="/resend-otp" method="POST" style="margin-top:10px;">
-  <button type="submit" class="resend-link" id="resendBtn" disabled>
-    Didn’t receive OTP? Resend
-  </button>
+<form action="/resend-otp" method="POST" id="resendForm">
+    <a href="#" class="resend-link" id="resendBtn">
+        Didn’t receive OTP? Resend
+    </a>
 </form>
 
 <!-- RESEND TIMER -->
@@ -47,6 +47,10 @@
 let seconds = 30;
 let timer = document.getElementById("timer");
 let btn = document.getElementById("resendBtn");
+let form = document.getElementById("resendForm");
+
+// disable initially
+btn.classList.add("disabled");
 
 let resendCountdown = setInterval(function() {
     seconds--;
@@ -55,9 +59,21 @@ let resendCountdown = setInterval(function() {
     if (seconds <= 0) {
         clearInterval(resendCountdown);
         timer.innerText = "";
-        btn.disabled = false; // enable resend
+        btn.classList.remove("disabled"); // ✅ enable click
     }
 }, 1000);
+
+
+/* =========================
+   CLICK HANDLER (FOR LINK)
+========================= */
+btn.addEventListener("click", function(e) {
+    e.preventDefault();
+
+    if (btn.classList.contains("disabled")) return;
+
+    form.submit();
+});
 
 
 /* =========================
