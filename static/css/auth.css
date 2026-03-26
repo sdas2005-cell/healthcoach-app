@@ -192,12 +192,13 @@ a:hover {
 
 /* Resend Link Style */
 .resend-link {
-    background: none;
-    border: none;
-    color: hsl(333, 73%, 50%);
+    all: unset;  /* 🔥 removes default button styles */
+
+    color: #dd2476;
     cursor: pointer;
     font-size: 14px;
-    margin-top: 10px;
+
+    display: inline;   /* important */
     text-decoration: underline;
 }
 

@@ -11,6 +11,7 @@ import os
 import webbrowser
 import threading
 import time
+import requests
 
 
 app = Flask(__name__)
@@ -1506,8 +1507,6 @@ def forgot():
 
             try:
 
-                import requests
-                import os
 
                 api_key = os.getenv("BREVO_API_KEY")
 
@@ -1616,7 +1615,25 @@ def resend_otp():
     session["otp_time"] = time.time()
 
     # Send email again
-    send_email(email, new_otp)
+    api_key = os.getenv("BREVO_API_KEY")
+
+    url = "https://api.brevo.com/v3/smtp/email"
+
+    headers = {
+        "accept": "application/json",
+        "api-key": api_key,
+        "content-type": "application/json"
+    }
+
+    data = {
+        "sender": {"email": "sonalipdas2005@gmail.com"},
+        "to": [{"email": email}],
+        "subject": "HealthCoach OTP",
+        "htmlContent": f"<p>Your OTP is <b>{new_otp}</b></p>"
+    }
+
+    response = requests.post(url, json=data, headers=headers)
+    print(response.text)
 
     flash("OTP resent successfully!", "success")
     return redirect("/verify")
