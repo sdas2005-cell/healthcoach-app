@@ -1298,9 +1298,9 @@ def report():
         tips=user.get("tips")
     )
 
-# =========================
+
 # PDF ROUTE
-# =========================
+
 @app.route("/download_report")
 def download_report():
 
@@ -1341,6 +1341,7 @@ def download_report():
 
     return response
 
+
 @app.route("/dashboard")
 def dashboard():
 
@@ -1349,12 +1350,34 @@ def dashboard():
 
     user = users.find_one({"email": session["user"]})
 
+    # ===== AUTO INITIALIZE PROGRESS (VERY IMPORTANT) =====
+    if not user.get("progress"):
+        initial_weight = user.get("body", {}).get("weight")
+
+        if initial_weight:
+            users.update_one(
+                {"email": session["user"]},
+                {
+                    "$push": {
+                        "progress": {
+                            "weight": initial_weight,
+                            "date": datetime.now()
+                        }
+                    }
+                }
+            )
+            # Reload updated user
+            user = users.find_one({"email": session["user"]})
+
     # ===== PROGRESS DATA =====
     progress = user.get("progress", [])
     progress_full = user.get("progress_full", [])
 
-    weights = [p["weight"] for p in progress]
-    dates = [p["date"].strftime("%d %b") for p in progress]
+    weights = [p.get("weight", 0) for p in progress]
+    dates = [
+        p.get("date").strftime("%d %b") if p.get("date") else ""
+        for p in progress
+    ]
 
     # ===== BODY DATA =====
     waist = [p.get("waist", 0) for p in progress_full]
@@ -1362,26 +1385,41 @@ def dashboard():
     hips = [p.get("hips", 0) for p in progress_full]
     arms = [p.get("arms", 0) for p in progress_full]
 
-    # ===== GOAL PROGRESS =====
-    start = weights[0] if weights else 0
-    current = weights[-1] if weights else 0
-    target = user.get("activity", {}).get("target_weight", 0)
-    goal = user.get("activity", {}).get("goal", "")
+    # ===== SAFE START & CURRENT =====
+    if weights:
+        start = weights[0]
+        current = weights[-1]
+    else:
+        start = user.get("body", {}).get("weight", 0)
+        current = start
 
+    # ===== GOAL DATA =====
+    target = user.get("activity", {}).get("target_weight", 0)
+    goal = user.get("activity", {}).get("goal", "").strip().lower()
+
+    # ===== PROGRESS CALCULATION =====
     percent = 0
 
-    if start and target:
-        if goal == "weight_loss":
-            total = start - target
-            done = start - current
-        else:
-            total = target - start
-            done = current - start
+    if start and current and target:
 
-        if total > 0:
+        if goal in ["weight_loss", "weight loss", "loss"]:
+            total = abs(start - target)
+            done = abs(start - current)
+
+        elif goal in ["weight_gain", "weight gain", "gain"]:
+            total = abs(target - start)
+            done = abs(current - start)
+
+        else:
+            # fallback (auto detect)
+            total = abs(start - target)
+            done = abs(start - current)
+
+        if total != 0:
             percent = int((done / total) * 100)
             percent = max(0, min(percent, 100))
- 
+
+    # ===== JOURNAL =====
     journal_entries = user.get("journal", [])
 
     return render_template(
