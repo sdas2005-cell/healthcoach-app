@@ -12,12 +12,15 @@ import webbrowser
 import threading
 import time
 import requests
-
+import pytz
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "dev_key")
 
-
+# IST TIME
+def get_ist_time():
+    ist = pytz.timezone('Asia/Kolkata')
+    return datetime.now(ist)
 
 
 
@@ -267,7 +270,7 @@ def body():
                 "$push": {
                     "progress": {
                         "weight": float(request.form.get("weight")),
-                        "date": datetime.now()
+                        "date": get_ist_time()
                     }
                 }
             }
@@ -278,7 +281,7 @@ def body():
             {
                 "$push": {
                     "progress_full": {
-                        "date": datetime.now(),
+                        "date": get_ist_time(),
                         "weight": float(request.form.get("weight")),
                         "waist": float(request.form.get("waist")),
                         "chest": float(request.form.get("chest")),
@@ -1315,7 +1318,7 @@ def dashboard():
                     "$push": {
                         "progress": {
                             "weight": initial_weight,
-                            "date": datetime.now()
+                            "date": get_ist_time()
                         }
                     }
                 }
@@ -1414,7 +1417,7 @@ def journal():
                 "$push": {
                     "journal": {
                         "text": entry_text,
-                        "date": datetime.now()
+                        "date": get_ist_time()
                     }
                 }
             }
