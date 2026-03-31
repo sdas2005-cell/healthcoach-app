@@ -55,9 +55,11 @@ Generate Personalized Plan →
     🤖 Generating your smart plan... Please wait
 </div>
 
-
 <!-- RESULT -->
 {% if show_result %}
+
+<!-- ✅ FORCE DAY ORDER -->
+{% set days_order = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"] %}
 
 <div class="result-container">
 
@@ -84,50 +86,52 @@ Goal: {{ goal.replace('_',' ') }} • {{ calories }} kcal/day
 
 </div>
 
-
 <!-- DIET -->
 <div class="card">
 <h3>🍽 Diet Plan</h3>
 
 {% if diet_duration == "day" %}
-{% for meal, data in meals.items() %}
-<div class="meal-box">
-<h4>{{ meal }}</h4>
-<p><b>{{ data.name }}</b></p>
-<p class="macro-line">
-🔥 {{ data.calories }} kcal |
-💪 {{ data.protein }}g |
-🍞 {{ data.carbs }}g |
-🥑 {{ data.fats }}g
-</p>
-</div>
-{% endfor %}
-
+    {% for meal, data in meals.items() %}
+    <div class="meal-box">
+        <h4>{{ meal }}</h4>
+        <p><b>{{ data.name }}</b></p>
+        <p class="macro-line">
+            🔥 {{ data.calories }} kcal |
+            💪 {{ data.protein }}g |
+            🍞 {{ data.carbs }}g |
+            🥑 {{ data.fats }}g
+        </p>
+    </div>
+    {% endfor %}
 {% else %}
-{% for day, plan in meals.items() %}
-<div class="day-box">
 
-<h3 class="day-title">{{ day }}</h3>
+    <!-- ORDER -->
+    {% for day in days_order %}
+        {% if day in meals %}
+        <div class="day-box">
 
-{% for meal, data in plan.items() %}
-<div class="meal-box">
-<h4>{{ meal }}</h4>
-<p><b>{{ data.name }}</b></p>
-<p class="macro-line">
-🔥 {{ data.calories }} kcal |
-💪 {{ data.protein }}g |
-🍞 {{ data.carbs }}g |
-🥑 {{ data.fats }}g
-</p>
-</div>
-{% endfor %}
+            <h3 class="day-title">{{ day }}</h3>
 
-</div>
-{% endfor %}
+            {% for meal, data in meals[day].items() %}
+            <div class="meal-box">
+                <h4>{{ meal }}</h4>
+                <p><b>{{ data.name }}</b></p>
+                <p class="macro-line">
+                    🔥 {{ data.calories }} kcal |
+                    💪 {{ data.protein }}g |
+                    🍞 {{ data.carbs }}g |
+                    🥑 {{ data.fats }}g
+                </p>
+            </div>
+            {% endfor %}
+
+        </div>
+        {% endif %}
+    {% endfor %}
+
 {% endif %}
 
 </div>
-
 
 <!-- EXERCISE -->
 <div class="card">
@@ -141,20 +145,24 @@ Goal: {{ goal.replace('_',' ') }} • {{ calories }} kcal/day
 </ul>
 
 {% else %}
-{% for day, exercises in exercise_plan.items() %}
-<div class="day-box">
-<h4>{{ day }}</h4>
-<ul>
-{% for ex in exercises %}
-<li>{{ ex }}</li>
-{% endfor %}
-</ul>
-</div>
-{% endfor %}
+
+    <!-- ✅ FIXED ORDER -->
+    {% for day in days_order %}
+        {% if day in exercise_plan %}
+        <div class="day-box">
+            <h4>{{ day }}</h4>
+            <ul>
+            {% for ex in exercise_plan[day] %}
+                <li>{{ ex }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    {% endfor %}
+
 {% endif %}
 
 </div>
-
 
 <!-- SMART TIPS -->
 <div class="card highlight ai-box">
@@ -189,7 +197,6 @@ Goal: {{ goal.replace('_',' ') }} • {{ calories }} kcal/day
 
 </div>
 
-
 <!-- SUMMARY -->
 <div class="card summary-box">
 <h3>🧠 Plan Summary</h3>
@@ -208,7 +215,6 @@ Goal: {{ goal.replace('_',' ') }} • {{ calories }} kcal/day
 
 {% endif %}
 
-
 <!-- NAV -->
 <div class="nav-container">
 <a href="/health_calculator" class="nav-btn">← Previous</a>
@@ -226,7 +232,6 @@ document.getElementById("planForm").addEventListener("submit", function() {
 
 window.onload = function() {
 
-    // hide loader when page loads
     document.getElementById("loader").style.display = "none";
 
     const result = document.querySelector(".result-container");
