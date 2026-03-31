@@ -20,14 +20,13 @@ app.secret_key = os.getenv("SECRET_KEY", "dev_key")
 
 
 
-# =========================
+
 # MongoDB Connection
-# =========================
 mongo_uri = os.getenv("MONGO_URI")
 
 
 if not mongo_uri:
-    raise ValueError("❌ MONGO URI NOT FOUND. Please set it in environment variables.")
+    raise ValueError(" MONGO URI NOT FOUND. Please set it in environment variables.")
 
 client = MongoClient(mongo_uri)
 
@@ -35,16 +34,14 @@ db = client["healthcoach"]
 
 users = db["users"]
 
-# =========================
+
 # HOME
-# =========================
 @app.route("/")
 def home():
     return render_template("index.html")
 
-# =========================
+
 # LOGIN
-# =========================
 @app.route("/login", methods=["GET","POST"])
 def login():
 
@@ -59,7 +56,7 @@ def login():
 
             session["user"] = email
 
-            # 🔥 Decide next page
+            # Decide next page
             if "personal" not in user:
                 next_page = "/personal"
             elif "body" not in user:
@@ -78,9 +75,8 @@ def login():
 
     return render_template("login.html")
 
-# =========================
+
 # SIGNUP
-# =========================
 @app.route("/signup", methods=["GET","POST"])
 def signup():
 
@@ -110,9 +106,8 @@ def signup():
     return render_template("signup.html")
 
 
-# =========================
-# PERSONAL DETAILS (UPDATED 🔥)
-# =========================
+
+# PERSONAL DETAILS 
 @app.route("/personal", methods=["GET","POST"])
 def personal():
 
@@ -127,9 +122,7 @@ def personal():
 
     if request.method == "POST":
 
-        # =========================
         # BASIC VALIDATION
-        # =========================
         if not all([
             request.form.get("name"),
             request.form.get("age"),
@@ -140,27 +133,24 @@ def personal():
             flash("Please fill all required fields", "error")
             return render_template("personal_details.html", data=request.form)
 
-        # =========================
+        
         # ALLERGIES VALIDATION
-        # =========================
         allergies = request.form.getlist("allergies")
 
         if "None" not in allergies and len(allergies) == 0:
             flash("Please select at least one allergy", "error")
             return render_template("personal_details.html", data=request.form)
 
-        # =========================
+        
         # HEALTH CONDITION VALIDATION
-        # =========================
         conditions = request.form.getlist("conditions")
 
         if len(conditions) == 0:
             flash("Please select at least one health condition", "error")
             return render_template("personal_details.html", data=request.form)
 
-        # =========================
+        
         # MEDICINE VALIDATION
-        # =========================
         medicine = request.form.get("medicine")
         medicine_name = request.form.get("medicine_name")
 
@@ -168,9 +158,8 @@ def personal():
             flash("Please enter the name of the medicine you are taking", "error")
             return render_template("personal_details.html", data=request.form)
 
-        # =========================
+    
         # SAVE DATA
-        # =========================
         data = {
             "name": request.form.get("name"),
             "age": request.form.get("age"),
@@ -195,17 +184,15 @@ def personal():
 
         return redirect("/body")
 
-    # =========================
+
     # GET REQUEST (LOAD DATA)
-    # =========================
     personal_data = user.get("personal") if user and "personal" in user else None
 
     return render_template("personal_details.html", data=personal_data)
 
 
-# =========================
-# BODY MEASUREMENTS (FIXED)
-# =========================
+
+# BODY MEASUREMENTS
 @app.route("/body", methods=["GET","POST"])
 def body():
 
@@ -214,16 +201,15 @@ def body():
 
     user_email = session["user"]
 
-    user = users.find_one({"email": user_email})   # 🔥 ADD THIS
+    user = users.find_one({"email": user_email})  
 
     if not user:
         return redirect("/login")
 
     if request.method == "POST":
 
-        # =========================
-        # 1. REQUIRED VALIDATION
-        # =========================
+        # REQUIRED VALIDATION
+        
         required_fields = [
             "weight", "height", "neck", "chest",
             "arms", "shoulders", "waist", "hip",
@@ -236,9 +222,6 @@ def body():
                 return redirect("/body")
 
 
-        # =========================
-        # 2. BONUS 3 (ADD HERE 🔥)
-        # =========================
         try:
             weight = float(request.form.get("weight"))
             height = float(request.form.get("height"))
@@ -256,9 +239,8 @@ def body():
             return redirect("/body")
 
 
-        # =========================
-        # 3. SAVE DATA
-        # =========================
+        
+        # SAVE DATA
         data = {
             "weight": request.form.get("weight"),
             "height": request.form.get("height"),
@@ -310,21 +292,19 @@ def body():
         return redirect("/activity")
 
 
-    # =========================
+    
     # GET REQUEST
-    # =========================
     user = users.find_one({"email": user_email})
     body_data = user.get("body") if user and "body" in user else None
 
     return render_template("body_measurements.html", data=body_data)
 
-# =========================
-# ACTIVITY PAGE (FIXED)
-# =========================
+
+# ACTIVITY PAGE 
 @app.route("/activity", methods=["GET", "POST"])
 def activity():
 
-    # ===== LOGIN CHECK =====
+    # LOGIN CHECK 
     if "user" not in session:
         return redirect("/login")
 
@@ -334,16 +314,15 @@ def activity():
     if not user:
         return redirect("/login")
 
-    # =========================
+    
     # POST REQUEST
-    # =========================
     if request.method == "POST":
 
         activity = request.form.get("activity")
         goal = request.form.get("goal")
         target_weight = request.form.get("target_weight")
 
-        # ===== VALIDATION =====
+        # VALIDATION 
         valid_activities = ["sedentary", "light", "moderate", "active", "very_active"]
         valid_goals = ["weight_loss", "weight_gain", "muscle_build", "maintain"]
 
@@ -361,7 +340,7 @@ def activity():
             flash("Invalid goal selected", "error")
             return redirect("/activity")
 
-        # ===== TARGET WEIGHT VALIDATION =====
+        # TARGET WEIGHT VALIDATION 
         if not target_weight:
             flash("Please enter your target weight", "error")
             return redirect("/activity")
@@ -377,7 +356,7 @@ def activity():
             flash("Invalid target weight", "error")
             return redirect("/activity")
 
-        # ===== SAVE DATA =====
+        # SAVE DATA 
         data = {
             "activity_level": activity,
             "goal": goal,
@@ -392,22 +371,19 @@ def activity():
 
         return redirect("/health_calculator")
 
-    # =========================
-    # GET REQUEST (NO RE-FETCH NEEDED)
-    # =========================
+    
+    # GET REQUEST
     activity_data = user.get("activity") if "activity" in user else None
 
     return render_template("activity_goal.html", data=activity_data)
 
-# =========================
-# CALCULATIONS (UPDATED 🔥)
-# =========================
+
+# CALCULATIONS 
 @app.route("/health_calculator")
 def health_calculator():
 
-    # =========================
+    
     # SESSION CHECK
-    # =========================
     if "user" not in session:
         return redirect("/login")
 
@@ -416,16 +392,14 @@ def health_calculator():
     if not user:
         return redirect("/login")
 
-    # =========================
+    
     # GET DATA FROM DB
-    # =========================
     personal = user.get("personal", {})
     body = user.get("body", {})
     activity = user.get("activity", {})
 
-    # =========================
+    
     # DATA EXTRACTION
-    # =========================
     weight = float(body.get("weight", 0))
     height = float(body.get("height", 0))
     age = int(personal.get("age", 0))
@@ -438,18 +412,16 @@ def health_calculator():
     hip = float(body.get("hip", 0))
     chest = float(body.get("chest", 0))
 
-    # =========================
-    # SAFE VALIDATION
-    # =========================
+    
+    # SAFE VALIDATION    
     if height <= 0 or weight <= 0:
         flash("Invalid body data. Please fill body measurements properly.", "error")
         return redirect("/body")
 
     height_m = height / 100
 
-    # =========================
+    
     # BMI
-    # =========================
     bmi = round(weight / (height_m ** 2), 2)
 
     if bmi < 18.5:
@@ -465,9 +437,8 @@ def health_calculator():
         bmi_status = "Obese"
         bmi_color = "#e74c3c"
 
-    # =========================
+    
     # BMR
-    # =========================
     if gender == "Male":
         bmr = 10 * weight + 6.25 * height - 5 * age + 5
     else:
@@ -475,9 +446,8 @@ def health_calculator():
 
     bmr = round(bmr, 2)
 
-    # =========================
+    
     # TDEE
-    # =========================
     activity_map = {
         "sedentary": 1.2,
         "light": 1.375,
@@ -488,9 +458,8 @@ def health_calculator():
 
     tdee = round(bmr * activity_map.get(activity_level, 1.55), 2)
 
-    # =========================
+    
     # CALORIES BASED ON GOAL
-    # =========================
     if goal == "weight_loss":
         calories = tdee - 500
     elif goal == "weight_gain":
@@ -500,9 +469,9 @@ def health_calculator():
 
     calories = round(calories, 2)
 
-    # =========================
+    
     # CALORIE STATUS
-    # =========================
+    
     if goal == "weight_loss":
         cal_status = "Calorie Deficit"
         cal_color = "#3498db"
@@ -513,36 +482,32 @@ def health_calculator():
         cal_status = "Maintenance"
         cal_color = "#2ecc71"
 
-    # =========================
+    
     # MACROS
-    # =========================
+    
     macros = calculate_macros(calories, goal)
 
     protein = macros["protein"]
     carbs = macros["carbs"]
     fats = macros["fats"]
 
-    # =========================
+    
     # WATER
-    # =========================
     water = round(weight * 0.033, 2)
 
-    # =========================
-    # BODY FAT % (NEW 🔥)
-    # =========================
+    
+    # BODY FAT % 
     body_fat = round(
         (1.20 * bmi) + (0.23 * age) - (10.8 if gender == "Male" else 0) - 5.4,
         2
     )
 
-    # =========================
-    # WAIST TO HIP RATIO (NEW 🔥)
-    # =========================
+    
+    # WAIST TO HIP RATIO 
     whr = round(waist / hip, 2) if hip > 0 else 0
 
-    # =========================
-    # SMART BODY TYPE (IMPROVED 🔥)
-    # =========================
+    
+    # SMART BODY TYPE 
     if body_fat < 18:
         body_type = "Ectomorph"
     elif body_fat < 25:
@@ -550,9 +515,9 @@ def health_calculator():
     else:
         body_type = "Endomorph"
 
-    # =========================
+    
     # BODY SHAPE
-    # =========================
+    
     if abs(chest - hip) < 5:
         body_shape = "Rectangle"
     elif chest > hip:
@@ -560,9 +525,8 @@ def health_calculator():
     else:
         body_shape = "Pear"
 
-    # =========================
-    # AI SUGGESTION (PREMIUM 🔥)
-    # =========================
+    
+    # SUGGESTION 
     if bmi < 18.5:
         suggestion = "Your body is currently underweight. Focus on a calorie surplus, strength training, and nutrient-dense meals to build healthy mass."
     elif bmi < 25:
@@ -591,9 +555,8 @@ def health_calculator():
         }}
     )
 
-    # =========================
+    
     # RENDER
-    # =========================
     return render_template(
         "health_calculator.html",
         bmi=bmi,
@@ -610,14 +573,13 @@ def health_calculator():
         water=water,
         body_type=body_type,
         body_shape=body_shape,
-        body_fat=body_fat,   # NEW
-        whr=whr,             # NEW
+        body_fat=body_fat,   
+        whr=whr,             
         suggestion=suggestion
     )
 
-# =========================
+
 # DIET & EXERCISE FUNCTIONS
-# =========================
 
 def split_calories(calories):
     return {
@@ -662,9 +624,8 @@ def filter_foods(food_list, allergies, conditions):
     for food in food_list:
         tags = food.get("tags", [])
 
-        # =========================
+        
         # ALLERGIES
-        # =========================
         if "Dairy" in allergies and "dairy" in tags:
             continue
 
@@ -674,9 +635,8 @@ def filter_foods(food_list, allergies, conditions):
         if "Seafood" in allergies and "seafood" in tags:
             continue
 
-        # =========================
+        
         # HEALTH CONDITIONS
-        # =========================
         if "Diabetes" in conditions:
             # allow safe + medium foods
             if "high_sugar" in tags:
@@ -686,20 +646,18 @@ def filter_foods(food_list, allergies, conditions):
             if "high_sodium" in tags:
                 continue
 
-        # =========================
+        
         # KEEP FOOD
-        # =========================
         filtered.append(food)
 
-    # fallback (IMPORTANT)
+    # fallback 
     return filtered if filtered else food_list
 
-# =========================
-# FOOD DATABASE (FIXED 🔥)
-# =========================
+
+# FOOD DATABASE 
 FOOD_DB = {
 
-# ================= VEG INDIAN =================
+# VEG INDIAN 
 "veg_indian": [
 
 # Breakfast
@@ -731,7 +689,7 @@ FOOD_DB = {
 ],
 
 
-# ================= NONVEG INDIAN =================
+# NONVEG INDIAN 
 "nonveg_indian": [
 
 # Breakfast
@@ -766,7 +724,7 @@ FOOD_DB = {
 ],
 
 
-# ================= VEG MEDITERRANEAN =================
+# VEG MEDITERRANEAN 
 "veg_mediterranean": [
 
 # Breakfast
@@ -794,7 +752,7 @@ FOOD_DB = {
 ],
 
 
-# ================= NONVEG MEDITERRANEAN =================
+# NONVEG MEDITERRANEAN
 "nonveg_mediterranean": [
 
 # Breakfast
@@ -886,9 +844,9 @@ def generate_week_meals(food_pool, calories):
             if not filtered_options:
                 filtered_options = options
 
-            # 🔥 FINAL SAFETY (IMPORTANT)
+            #  FINAL SAFETY
             if not filtered_options:
-                filtered_options = food_pool   # 🔥 FIX
+                filtered_options = food_pool   
 
             food = random.choice(filtered_options)
             used_foods.add(food["name"])
@@ -913,9 +871,9 @@ def generate_week_meals(food_pool, calories):
 
     return weekly
 
-# =========================
-# ADVANCED EXERCISE SYSTEM 🔥
-# =========================
+
+# ADVANCED EXERCISE SYSTEM 
+
 def generate_exercise(goal, duration):
 
     # 10+ exercises per category
@@ -950,9 +908,9 @@ def generate_exercise(goal, duration):
     else:
         return random.sample(pool, 4)
 
-# =========================
-# ADVANCED FOOD RESTRICTION SYSTEM 🔥
-# =========================
+
+# ADVANCED FOOD RESTRICTION SYSTEM 
+
 def get_restricted_foods(user, calories):
 
     personal = user.get("personal", {})
@@ -973,18 +931,18 @@ def get_restricted_foods(user, calories):
 
     restricted = []
 
-    # =========================
-    # ALLERGIES 🚫
-    # =========================
+    
+    # ALLERGIES 
+    
     if "Peanuts" in allergies:
         restricted.append("Peanuts and peanut-based products")
 
     if "Dairy" in allergies:
         restricted.append("Milk, paneer, cheese and dairy products")
 
-    # =========================
-    # HEALTH CONDITIONS 🧬
-    # =========================
+    
+    # HEALTH CONDITIONS 
+    
     if "Diabetes" in conditions:
         restricted.append("Sugary foods, sweets, desserts, sweetened drinks")
 
@@ -994,27 +952,27 @@ def get_restricted_foods(user, calories):
     if "Thyroid" in conditions:
         restricted.append("Excess soy products and processed foods")
 
-    # =========================
-    # BMI BASED ⚖️
-    # =========================
+    
+    # BMI BASED 
+    
     if bmi >= 25:
         restricted.append("Fried foods, junk food, high-fat fast foods")
 
     if bmi < 18.5:
         restricted.append("Low-calorie restrictive diets (focus on nutrient-dense foods instead)")
 
-    # =========================
-    # GOAL BASED 🎯
-    # =========================
+    
+    # GOAL BASED 
+    
     if goal == "weight_loss":
         restricted.append("High-calorie junk food, sugary snacks, soft drinks")
 
     if goal == "muscle_build":
         restricted.append("Highly processed junk food with low protein")
 
-    # =========================
+    
     # ALWAYS INCLUDE (GENERAL HEALTH)
-    # =========================
+    
     restricted.append("Excess alcohol and highly processed foods")
 
     # Remove duplicates
@@ -1064,9 +1022,9 @@ def calculate_calories(user):
     return round(calories)
 
 
-# =========================
+
 # PLAN (DIET + EXERCISE)
-# =========================
+
 @app.route("/plan", methods=["GET", "POST"])
 def plan():
 
@@ -1075,7 +1033,7 @@ def plan():
 
     user = users.find_one({"email": session["user"]})
 
-    # ✅ ADD THIS RIGHT HERE
+    
     if not user:
         return redirect("/login")
 
@@ -1090,7 +1048,7 @@ def plan():
         diet_duration = request.form.get("diet_duration")
         exercise_duration = request.form.get("exercise_duration")
 
-        # 1. GET USER DATA FIRST
+        # GET USER DATA FIRST
         personal = user.get("personal", {})
         activity = user.get("activity", {})
 
@@ -1098,22 +1056,18 @@ def plan():
         conditions = personal.get("conditions", [])
         goal = activity.get("goal", "maintain")
 
-        # 2. GET FOOD
+        # GET FOOD
         food_pool = FOOD_DB.get(key, FOOD_DB["veg_indian"])
 
-        # 3. FILTER FOOD (NOW WORKS PERFECTLY)
+        # FILTER FOOD 
         filtered_foods = filter_foods(food_pool, allergies, conditions)
 
-        # 🔥 fallback safety
+        #  fallback safety
         if not filtered_foods:
             filtered_foods = food_pool
 
-        # 🔥 USE REAL CALORIES FROM AI PAGE
-    
-        
-        
-        calories = calculate_calories(user)   # ✅ CORRECT
-
+        #  USE REAL CALORIES FROM health calculator PAGE
+        calories = calculate_calories(user)   
         # DIET
         if diet_duration == "week":
             meals = generate_week_meals(filtered_foods, calories)
@@ -1126,9 +1080,9 @@ def plan():
         # RESTRICTED FOODS
         restricted_foods = get_restricted_foods(user, calories)
 
-        # =========================
+        
         # SMART SUMMARY TEXT
-        # =========================
+        
         summary = f"""
         This plan is created based on your goal of {goal.replace('_',' ')} and your daily calorie requirement of {calories} kcal.
         The diet is structured with balanced macros and portion control, while the exercise routine is designed to match your activity level and improve overall fitness.
@@ -1137,9 +1091,9 @@ def plan():
         macros = calculate_macros(calories, goal)
         
 
-        # =========================
-        # ADD THIS (TIPS LOGIC 🔥)
-        # =========================
+        
+        # (TIPS LOGIC )
+        
         tips = []
 
         personal = user.get("personal", {})
@@ -1217,7 +1171,7 @@ def plan():
             }}
         )
 
-        # 🔥 STORE TEMP DATA IN SESSION
+        #  STORE TEMP DATA IN SESSION
         session["plan_data"] = {
             "meals": meals,
             "exercise_plan": exercise_plan,
@@ -1231,7 +1185,7 @@ def plan():
             "goal": goal
         }
 
-        session["show_plan"] = True   # 🔥 FLAG
+        session["show_plan"] = True   
 
         return redirect("/plan")
 
@@ -1239,7 +1193,7 @@ def plan():
     show_plan = session.get("show_plan")
     from_report = request.args.get("from")
 
-    # ✅ CASE 1: Coming from report → show result
+    #  Coming from report → show result
     if from_report == "report" and plan_data:
         return render_template(
             "plan.html",
@@ -1247,9 +1201,9 @@ def plan():
             show_result=True
         )
 
-    # ✅ CASE 2: After generate → show once
+    #  After generate → show once
     if plan_data and show_plan:
-        session["show_plan"] = False   # 🔥 reset
+        session["show_plan"] = False   #  reset
 
         return render_template(
             "plan.html",
@@ -1257,15 +1211,15 @@ def plan():
             show_result=True
         )
 
-    # ❌ CASE 3: Refresh → CLEAR EVERYTHING
+    # Refresh → CLEAR EVERYTHING
     session.pop("plan_data", None)
 
     return render_template("plan.html", show_result=False)
 
 
-# =========================
+
 # REPORT ROUTE
-# =========================
+
 @app.route("/report")
 def report():
 
@@ -1350,7 +1304,7 @@ def dashboard():
 
     user = users.find_one({"email": session["user"]})
 
-    # ===== AUTO INITIALIZE PROGRESS (VERY IMPORTANT) =====
+    # AUTO INITIALIZE PROGRESS 
     if not user.get("progress"):
         initial_weight = user.get("body", {}).get("weight")
 
@@ -1369,7 +1323,7 @@ def dashboard():
             # Reload updated user
             user = users.find_one({"email": session["user"]})
 
-    # ===== PROGRESS DATA =====
+    # PROGRESS DATA 
     progress = user.get("progress", [])
     progress_full = user.get("progress_full", [])
 
@@ -1379,13 +1333,13 @@ def dashboard():
         for p in progress
     ]
 
-    # ===== BODY DATA =====
+    #  BODY DATA 
     waist = [p.get("waist", 0) for p in progress_full]
     chest = [p.get("chest", 0) for p in progress_full]
     hips = [p.get("hips", 0) for p in progress_full]
     arms = [p.get("arms", 0) for p in progress_full]
 
-    # ===== SAFE START & CURRENT =====
+    #  SAFE START & CURRENT 
     if weights:
         start = weights[0]
         current = weights[-1]
@@ -1393,11 +1347,11 @@ def dashboard():
         start = user.get("body", {}).get("weight", 0)
         current = start
 
-    # ===== GOAL DATA =====
+    #  GOAL DATA 
     target = user.get("activity", {}).get("target_weight", 0)
     goal = user.get("activity", {}).get("goal", "").strip().lower()
 
-    # ===== PROGRESS CALCULATION =====
+    #  PROGRESS CALCULATION 
     percent = 0
 
     if start and current and target:
@@ -1419,7 +1373,7 @@ def dashboard():
             percent = int((done / total) * 100)
             percent = max(0, min(percent, 100))
 
-    # ===== JOURNAL =====
+    #  JOURNAL 
     journal_entries = user.get("journal", [])
 
     return render_template(
@@ -1443,13 +1397,13 @@ def dashboard():
 @app.route("/journal", methods=["POST"])
 def journal():
 
-    # ===== LOGIN CHECK =====
+    #  LOGIN CHECK 
     if "user" not in session:
         return redirect("/login")
 
     user_email = session["user"]
 
-    # ===== GET ENTRY =====
+    #  GET ENTRY 
     entry_text = request.form.get("entry")
 
     if entry_text:
@@ -1468,6 +1422,7 @@ def journal():
 
     return redirect("/dashboard")
 
+# DELETE ENTRY
 @app.route("/delete_entry/<int:index>")
 def delete_entry(index):
 
@@ -1488,34 +1443,34 @@ def delete_entry(index):
 
     return redirect("/dashboard")
 
-
+# DOWNLOAD PROGRESS
 @app.route("/download_progress")
 def download_progress():
 
-    # ===== LOGIN CHECK =====
+    #  LOGIN CHECK 
     if "user" not in session:
         return redirect("/login")
 
-    # ===== GET USER DATA =====
+    #  GET USER DATA 
     user = users.find_one({"email": session["user"]})
 
     if not user:
         return redirect("/login")
 
-    # ===== GET PROGRESS DATA =====
+    #  GET PROGRESS DATA 
     progress = user.get("progress_full", [])
 
-    # ===== GENERATE HTML =====
+    #  GENERATE HTML 
     html = render_template(
         "progress_pdf.html",
         progress=progress,
         user=user
     )
 
-    # ===== CREATE PDF =====
+    #  CREATE PDF 
     pdf = HTML(string=html).write_pdf()
 
-    # ===== SEND RESPONSE =====
+    #  SEND RESPONSE 
     response = make_response(pdf)
     response.headers["Content-Type"] = "application/pdf"
     response.headers["Content-Disposition"] = "attachment; filename=progress_report.pdf"
@@ -1524,9 +1479,9 @@ def download_progress():
 
 
 
-# =========================
+
 # FORGOT PASSWORD
-# =========================
+
 @app.route("/forgot", methods=["GET","POST"])
 def forgot():
 
@@ -1578,9 +1533,9 @@ def forgot():
 
     return render_template("forgot.html")
 
-# =========================
+
 # VERIFY OTP
-# =========================
+
 @app.route("/verify", methods=["GET","POST"])
 def verify():
 
@@ -1594,12 +1549,12 @@ def verify():
         stored_otp = session.get("otp")
         otp_time = session.get("otp_time")
 
-        # 🔥 Check expiry (2 minutes)
+        #  Check expiry (2 minutes)
         if not otp_time or time.time() - otp_time > 120:
             flash("OTP expired. Please resend OTP.", "error")
             return redirect("/verify")
 
-        # 🔥 Check OTP
+        #  Check OTP
         if entered_otp == stored_otp:
             flash("OTP verified successfully", "success")
             return redirect("/reset")
@@ -1608,9 +1563,9 @@ def verify():
 
     return render_template("verify.html")
 
-# =========================
+
 # RESET PASSWORD
-# =========================
+
 @app.route("/reset", methods=["GET","POST"])
 def reset():
 
@@ -1633,9 +1588,9 @@ def reset():
 
     return render_template("reset.html")
 
-# =========================
+
 # RESEND OTP
-# =========================
+
 @app.route("/resend-otp", methods=["POST"])
 def resend_otp():
 
@@ -1676,17 +1631,16 @@ def resend_otp():
     flash("OTP resent successfully!", "success")
     return redirect("/verify")
 
-# =========================
+
 # LOGOUT
-# =========================
+
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect("/login")
 
-# =========================
+
 # RUN
-# =========================
 
 def open_browser():
     webbrowser.open("http://127.0.0.1:5000")

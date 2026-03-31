@@ -1,6 +1,4 @@
-// ==========================
 // START BUTTON (INDEX PAGE)
-// ==========================
 document.addEventListener("DOMContentLoaded", function () {
 
     const startBtn = document.querySelector(".start-btn");
@@ -14,9 +12,9 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-// ==========================
+
 // BODY PAGE FUNCTIONS
-// ==========================
+
 function kgToLbs() {
     let kg = document.getElementById("kg")?.value;
     if (kg) {
@@ -60,12 +58,12 @@ function feetToCm() {
 }
 
 
-// ==========================
-// PERSONAL PAGE LOGIC (FIXED)
-// ==========================
+
+// PERSONAL PAGE LOGIC 
+
 document.addEventListener("DOMContentLoaded", function () {
 
-    // ===== ALLERGY =====
+    //  ALLERGY 
     const otherAllergy = document.getElementById("otherAllergy");
     const allergyBox = document.getElementById("otherAllergyBox");
 
@@ -75,11 +73,11 @@ document.addEventListener("DOMContentLoaded", function () {
         otherAllergy.addEventListener("change", function () {
             allergyBox.style.display = this.checked ? "block" : "none";
 
-            if (!this.checked) allergyBox.value = ""; // 🔥 clear value
+            if (!this.checked) allergyBox.value = ""; //  clear value
         });
     }
 
-    // ===== CONDITION =====
+    //  CONDITION 
     const otherCondition = document.getElementById("otherCondition");
     const conditionBox = document.getElementById("otherConditionBox");
 
@@ -89,18 +87,18 @@ document.addEventListener("DOMContentLoaded", function () {
         otherCondition.addEventListener("change", function () {
             conditionBox.style.display = this.checked ? "block" : "none";
 
-            if (!this.checked) conditionBox.value = ""; // 🔥 clear value
+            if (!this.checked) conditionBox.value = ""; // clear value
         });
     }
 
-    // ===== MEDICINE =====
+    // MEDICINE 
     const medYes = document.getElementById("medYes");
     const medNo = document.getElementById("medNo");
     const medicineBox = document.getElementById("medicineBox");
 
     if (medYes && medNo && medicineBox) {
 
-        // 🔥 Initial state
+        // Initial state
         if (medYes.checked) {
             medicineBox.style.display = "block";
             medicineBox.setAttribute("required", true);
@@ -119,16 +117,16 @@ document.addEventListener("DOMContentLoaded", function () {
         medNo.addEventListener("change", function () {
             medicineBox.style.display = "none";
             medicineBox.removeAttribute("required");
-            medicineBox.value = ""; // 🔥 clear value
+            medicineBox.value = ""; //  clear value
         });
     }
 
 });
 
 
-// ==========================
+
 // PERSONAL FORM VALIDATION
-// ==========================
+
 const personalForm = document.getElementById("personalForm");
 
 if (personalForm) {
@@ -152,9 +150,9 @@ if (personalForm) {
 }
 
 
-// ==========================
+
 // BODY FORM VALIDATION + CLEAR
-// ==========================
+
 const bodyForm = document.getElementById("bodyForm");
 
 if (bodyForm) {
@@ -184,9 +182,9 @@ if (bodyForm) {
     });
 }
 
-// ==========================
+
 // DIET PAGE LOGIC
-// ==========================
+
 document.addEventListener("DOMContentLoaded", function () {
 
     // CARD SELECTION EFFECT

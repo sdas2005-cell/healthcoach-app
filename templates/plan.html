@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="UTF-8">
-<title>AI Diet & Exercise Plan</title>
+<title> Diet & Exercise Plan</title>
 
 <link rel="stylesheet" href="{{ url_for('static', filename='css/plan.css') }}">
 
@@ -13,9 +13,7 @@
 
 <h1 class="title">Personalized Diet & Exercise Plan</h1>
 
-<!-- =========================
-     FORM
-========================= -->
+<!-- FORM -->
 <form method="POST" class="main-container" id="planForm">
 
 <h2>🍽 Diet Preferences</h2>
@@ -58,14 +56,12 @@ Generate Personalized Plan →
 </div>
 
 
-<!-- =========================
-     RESULT
-========================= -->
+<!-- RESULT -->
 {% if show_result %}
 
 <div class="result-container">
 
-<h2>🔥 Your Smart AI Plan</h2>
+<h2>🔥 Your Smart Plan</h2>
 
 <!-- CALORIES -->
 <div class="card">
@@ -230,7 +226,7 @@ document.getElementById("planForm").addEventListener("submit", function() {
 
 window.onload = function() {
 
-    // 🔥 hide loader when page loads
+    // hide loader when page loads
     document.getElementById("loader").style.display = "none";
 
     const result = document.querySelector(".result-container");

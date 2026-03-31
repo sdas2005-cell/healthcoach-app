@@ -1,13 +1,9 @@
-/* =========================
-   GLOBAL
-========================= */
+/* GLOBAL */
 * {
     transition: all 0.2s ease;
 }
 
-/* =========================
-   BACKGROUND
-========================= */
+/*  BACKGROUND */
 body {
     margin: 0;
     min-height: 100vh;
@@ -29,9 +25,7 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* =========================
-   TITLE
-========================= */
+/* TITLE */
 .title {
     color: white;
     font-size: 38px;
@@ -40,9 +34,7 @@ body {
     font-weight: 600;
 }
 
-/* =========================
-   FORM CONTAINER
-========================= */
+/* FORM CONTAINER */
 .main-container {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(12px);
@@ -60,9 +52,7 @@ body {
     box-shadow: 0 10px 40px rgba(0,0,0,0.3);
 }
 
-/* =========================
-   INPUTS
-========================= */
+/* INPUTS */
 select {
     padding: 10px;
     border-radius: 8px;
@@ -72,9 +62,7 @@ select {
     outline: none;
 }
 
-/* =========================
-   BUTTON
-========================= */
+/* BUTTON */
 .generate-btn {
     padding: 12px;
     border-radius: 25px;
@@ -98,9 +86,7 @@ select {
     transform: none;
 }
 
-/* =========================
-   LOADER
-========================= */
+/* LOADER */
 .loader {
     display: none;
     text-align: center;
@@ -121,9 +107,7 @@ select {
     100% { opacity: 0.2; }
 }
 
-/* =========================
-   RESULT CONTAINER
-========================= */
+/* RESULT CONTAINER */
 .result-container {
     width: 90vw;
     margin-top: 25px;
@@ -133,9 +117,7 @@ select {
     gap: 20px;
 }
 
-/* =========================
-   CARDS
-========================= */
+/* CARDS */
 .card {
     background: rgba(255,255,255,0.95);
     backdrop-filter: blur(10px);
@@ -157,9 +139,7 @@ select {
     background: linear-gradient(135deg, #ffe3ec, #fff);
 }
 
-/* =========================
-   TEXT
-========================= */
+/* TEXT */
 .value {
     font-size: 22px;
     font-weight: bold;
@@ -172,9 +152,7 @@ select {
     margin-top: 5px;
 }
 
-/* =========================
-   DAY BOX
-========================= */
+/* DAY BOX */
 .day-box {
     margin-top: 15px;
     padding: 15px;
@@ -190,9 +168,7 @@ select {
     margin-bottom: 10px;
 }
 
-/* =========================
-   MEAL BOX
-========================= */
+/* MEAL BOX */
 .meal-box {
     margin-bottom: 12px;
     padding: 12px;
@@ -208,18 +184,14 @@ select {
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
 }
 
-/* =========================
-   MACROS
-========================= */
+/* MACROS */
 .macro-line {
     font-size: 13px;
     color: #444;
     margin-top: 5px;
 }
 
-/* =========================
-   LISTS
-========================= */
+/* LISTS */
 ul {
     padding-left: 20px;
 }
@@ -228,9 +200,7 @@ li {
     margin-bottom: 6px;
 }
 
-/* =========================
-   AI BOX
-========================= */
+/* AI BOX */
 .ai-box {
     border-left: 6px solid #6c5ce7;
     background: linear-gradient(135deg, #f3f0ff, #ffffff);
@@ -246,9 +216,7 @@ li {
     margin-top: 10px;
 }
 
-/* =========================
-   SUMMARY
-========================= */
+/* SUMMARY */
 .summary-box {
     background: linear-gradient(135deg, #fff, #ffe3ec);
 }
@@ -265,9 +233,7 @@ li {
     font-weight: bold;
 }
 
-/* =========================
-   NAV BUTTONS
-========================= */
+/* NAV BUTTONS */
 .nav-container {
     display: flex;
     justify-content: space-between;
@@ -304,9 +270,7 @@ li {
     transform: scale(1.05);
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+/* RESPONSIVE */
 @media (max-width: 900px) {
 
     .main-container {

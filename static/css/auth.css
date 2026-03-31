@@ -1,6 +1,4 @@
-/* =========================
-   BACKGROUND
-========================= */
+/* BACKGROUND */
 body {
     margin: 0;
     height: 100vh;
@@ -31,9 +29,7 @@ body {
 }
 
 
-/* =========================
-   CONTAINER (CARD STYLE)
-========================= */
+/* CONTAINER (CARD STYLE) */
 .container {
     background: white;
     padding: 40px;
@@ -41,7 +37,7 @@ body {
     border-radius: 20px;
 
     width: 100%;
-    max-width: 420px;   /* 🔥 key fix */
+    max-width: 420px;   
 
     text-align: center;
 
@@ -49,7 +45,7 @@ body {
 
     animation: fadeIn 0.8s ease;
 
-    box-sizing: border-box;   /* ✅ important */
+    box-sizing: border-box;   
 }
 
 /* Fade Animation */
@@ -65,18 +61,14 @@ body {
 }
 
 
-/* =========================
-   HEADING
-========================= */
+/* HEADING */
 h2 {
     margin-bottom: 20px;
     color: #dd2476;
 }
 
 
-/* =========================
-   INPUT FIELDS
-========================= */
+/* INPUT FIELDS */
 input {
     display: block;
 
@@ -93,7 +85,7 @@ input {
 
     transition: 0.3s;
 
-    box-sizing: border-box;   /* 🔥 THIS FIXES ALIGNMENT */
+    box-sizing: border-box;   /* THIS FIXES ALIGNMENT */
 }
 
 /* Input Focus Effect */
@@ -103,9 +95,7 @@ input:focus {
 }
 
 
-/* =========================
-   BUTTON
-========================= */
+/* BUTTON */
 button {
     padding: 12px 20px;
 
@@ -133,9 +123,7 @@ button:hover {
 }
 
 
-/* =========================
-   LINKS
-========================= */
+/*  LINKS */
 a {
     display: block;
 
@@ -155,9 +143,7 @@ a:hover {
 }
 
 
-/* =========================
-   FLASH MESSAGES (IMPROVED)
-========================= */
+/* FLASH MESSAGES  */
 .success {
     background: #4CAF50;
     color: white;
@@ -190,9 +176,7 @@ a:hover {
     }
 }
 
-/* =========================
-   RESEND LINK (FINAL FIX)
-========================= */
+/* RESEND LINK */
 .resend-link {
     color: #dd2476;
     cursor: pointer;
@@ -207,6 +191,6 @@ a:hover {
 /* Disabled state */
 .resend-link.disabled {
     color: gray;
-    pointer-events: none;   /* 🔥 disables clicking */
+    pointer-events: none;   /* disables clicking */
     text-decoration: none;
 }

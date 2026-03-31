@@ -1,6 +1,4 @@
-/* =========================
-   BACKGROUND
-========================= */
+/* BACKGROUND */
 body {
     margin: 0;
     min-height: 100vh;
@@ -29,9 +27,7 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* =========================
-   TITLE
-========================= */
+/* TITLE */
 .title {
     color: white;
     font-size: 38px;
@@ -39,9 +35,7 @@ body {
     text-align: center;
 }
 
-/* =========================
-   CONTAINER
-========================= */
+/* CONTAINER */
 .report-container {
     width: 85vw;
     margin-top: 20px;
@@ -51,9 +45,7 @@ body {
     gap: 20px;
 }
 
-/* =========================
-   CARDS
-========================= */
+/* CARDS */
 .card {
     background: white;
     padding: 20px;
@@ -74,9 +66,7 @@ body {
     background: linear-gradient(135deg, #ffe3ec, #fff);
 }
 
-/* =========================
-   TEXT
-========================= */
+/* TEXT */
 h2 {
     color: #dd2476;
     margin-bottom: 10px;
@@ -87,9 +77,7 @@ p {
     color: #333;
 }
 
-/* =========================
-   DOWNLOAD BUTTON
-========================= */
+/* DOWNLOAD BUTTON */
 .download-section {
     text-align: center;
     margin-top: 10px;
@@ -117,9 +105,7 @@ p {
     transform: scale(1.05);
 }
 
-/* =========================
-   NAV BUTTONS
-========================= */
+/* NAV BUTTONS */
 .nav-btn {
     position: fixed;
     bottom: 25px;

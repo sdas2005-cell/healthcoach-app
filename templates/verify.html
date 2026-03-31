@@ -41,9 +41,7 @@
 </p>
 
 <script>
-/* =========================
-   RESEND TIMER (30s)
-========================= */
+/* RESEND TIMER (30s) */
 let seconds = 30;
 let timer = document.getElementById("timer");
 let btn = document.getElementById("resendBtn");
@@ -59,14 +57,12 @@ let resendCountdown = setInterval(function() {
     if (seconds <= 0) {
         clearInterval(resendCountdown);
         timer.innerText = "";
-        btn.classList.remove("disabled"); // ✅ enable click
+        btn.classList.remove("disabled"); // enable click
     }
 }, 1000);
 
 
-/* =========================
-   CLICK HANDLER (FOR LINK)
-========================= */
+/* CLICK HANDLER (FOR LINK) */
 btn.addEventListener("click", function(e) {
     e.preventDefault();
 
@@ -76,9 +72,7 @@ btn.addEventListener("click", function(e) {
 });
 
 
-/* =========================
-   OTP EXPIRY TIMER (120s)
-========================= */
+/* OTP EXPIRY TIMER (120s) */
 let otpTime = 120;
 let otpTimer = document.getElementById("otp-expiry");
 
