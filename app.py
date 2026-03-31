@@ -22,7 +22,9 @@ def get_ist_time():
     ist = pytz.timezone('Asia/Kolkata')
     return datetime.now(ist)
 
-
+@app.context_processor
+def inject_timezone():
+    return dict(pytz=pytz)
 
 # MongoDB Connection
 mongo_uri = os.getenv("MONGO_URI")

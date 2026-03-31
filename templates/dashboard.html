@@ -141,7 +141,7 @@
             <p>{{ entry.text }}</p>
 
             <small>
-                {{ entry.date.strftime("%d %b %Y • %I:%M %p") }}
+                {{ entry.date.astimezone(pytz.timezone('Asia/Kolkata')).strftime("%d %b %Y • %I:%M %p") }}
             </small>
 
             <br>
