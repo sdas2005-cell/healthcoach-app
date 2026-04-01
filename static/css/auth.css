@@ -211,3 +211,56 @@ a:hover {
     transform: translateY(-50%);
     cursor: pointer;
 }
+.container {
+    width: 350px;
+    margin: 80px auto;
+    padding: 30px;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.container h2 {
+    margin-bottom: 20px;
+}
+
+.container input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.container button {
+    width: 100%;
+    padding: 10px;
+    background: #2ecc71;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.container button:hover {
+    background: #27ae60;
+}
+
+.resend-btn {
+    background: #3498db;
+    margin-top: 10px;
+}
+
+.resend-btn:hover {
+    background: #2980b9;
+}
+
+/* Flash messages */
+.success {
+    color: green;
+}
+
+.error {
+    color: red;
+}

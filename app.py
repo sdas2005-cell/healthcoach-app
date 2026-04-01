@@ -191,6 +191,40 @@ def verify_signup():
 
     return render_template("verify_signup.html")
 
+@app.route("/resend-signup-otp", methods=["POST"])
+def resend_signup_otp():
+
+    if "signup_data" not in session:
+        return redirect("/signup")
+
+    email = session["signup_data"]["email"]
+
+    new_otp = str(random.randint(100000, 999999))
+    session["signup_otp"] = new_otp
+    session["signup_otp_time"] = time.time()
+
+    # Send email again (same Brevo logic)
+    api_key = os.getenv("BREVO_API_KEY")
+
+    url = "https://api.brevo.com/v3/smtp/email"
+
+    headers = {
+        "accept": "application/json",
+        "api-key": api_key,
+        "content-type": "application/json"
+    }
+
+    data = {
+        "sender": {"email": "sonalipdas2005@gmail.com"},
+        "to": [{"email": email}],
+        "subject": "HealthCoach Signup OTP",
+        "htmlContent": f"<p>Your new OTP is <b>{new_otp}</b></p>"
+    }
+
+    requests.post(url, json=data, headers=headers)
+
+    flash("OTP resent successfully!", "success")
+    return redirect("/verify_signup")
 
 # PERSONAL DETAILS 
 @app.route("/personal", methods=["GET","POST"])
