@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from weasyprint import HTML
 from flask import make_response
 from datetime import datetime
+from datetime import timedelta
 
 import random
 from email.mime.text import MIMEText
@@ -18,6 +19,8 @@ import re
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "dev_key")
 
+
+app.permanent_session_lifetime = timedelta(minutes=10)
 # IST TIME
 def get_ist_time():
     ist = pytz.timezone('Asia/Kolkata')
@@ -111,6 +114,7 @@ def signup():
         otp = str(random.randint(100000, 999999))
 
         # 🧠 Store in session (like forgot password)
+        session.permanent = True
         session["signup_data"] = {
             "name": name,
             "email": email,
@@ -195,6 +199,7 @@ def verify_signup():
 def resend_signup_otp():
 
     if "signup_data" not in session:
+        flash("Session expired. Please sign up again.", "error")
         return redirect("/signup")
 
     email = session["signup_data"]["email"]
@@ -203,27 +208,31 @@ def resend_signup_otp():
     session["signup_otp"] = new_otp
     session["signup_otp_time"] = time.time()
 
-    # Send email again (same Brevo logic)
-    api_key = os.getenv("BREVO_API_KEY")
+    try:
+        api_key = os.getenv("BREVO_API_KEY")
 
-    url = "https://api.brevo.com/v3/smtp/email"
+        url = "https://api.brevo.com/v3/smtp/email"
 
-    headers = {
-        "accept": "application/json",
-        "api-key": api_key,
-        "content-type": "application/json"
-    }
+        headers = {
+            "accept": "application/json",
+            "api-key": api_key,
+            "content-type": "application/json"
+        }
 
-    data = {
-        "sender": {"email": "sonalipdas2005@gmail.com"},
-        "to": [{"email": email}],
-        "subject": "HealthCoach Signup OTP",
-        "htmlContent": f"<p>Your new OTP is <b>{new_otp}</b></p>"
-    }
+        data = {
+            "sender": {"email": "sonalipdas2005@gmail.com"},
+            "to": [{"email": email}],
+            "subject": "HealthCoach Signup OTP",
+            "htmlContent": f"<p>Your new OTP is <b>{new_otp}</b></p>"
+        }
 
-    requests.post(url, json=data, headers=headers)
+        requests.post(url, json=data, headers=headers)
 
-    flash("OTP resent successfully!", "success")
+        flash("OTP resent successfully!", "success")
+
+    except Exception as e:
+        flash("Error resending OTP", "error")
+
     return redirect("/verify_signup")
 
 # PERSONAL DETAILS 
