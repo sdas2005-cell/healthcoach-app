@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-<title>Signup - HealthCoach</title>
-
-<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
-
+    <title>Signup - HealthCoach</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
 </head>
 
 <body>
@@ -26,17 +23,28 @@
 
 <input type="email" name="email" placeholder="Email" required>
 
-<input type="password" name="password" placeholder="Password" required>
+<!-- 👁️ Password with eye button -->
+<div class="password-container">
+    <input type="password" id="password" name="password" placeholder="Password" required>
+    <span class="toggle-password" onclick="togglePassword()">👁️</span>
+</div>
 
 <button type="submit">Sign Up</button>
 
 </form>
 
 <p>Already have account?</p>
-
 <a href="/login">Login here</a>
 
 </div>
+
+<!-- JS -->
+<script>
+function togglePassword() {
+    const password = document.getElementById("password");
+    password.type = password.type === "password" ? "text" : "password";
+}
+</script>
 
 </body>
 </html>

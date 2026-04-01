@@ -13,6 +13,7 @@ import threading
 import time
 import requests
 import pytz
+import re
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "dev_key")
@@ -91,25 +92,104 @@ def signup():
         email = request.form["email"]
         password = request.form["password"]
 
-        existing_user = users.find_one({"email": email})
+        # 🔴 Email format validation
+        email_pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
+        if not re.match(email_pattern, email):
+            flash("Invalid email format", "error")
+            return redirect("/signup")
 
+        # 🔴 Check existing user
+        existing_user = users.find_one({"email": email})
         if existing_user:
             flash("Account already exists", "error")
             return redirect("/login")
 
+        # 🔐 Hash password
         hashed_password = generate_password_hash(password)
 
-        users.insert_one({
+        # 🔢 Generate OTP
+        otp = str(random.randint(100000, 999999))
+
+        # 🧠 Store in session (like forgot password)
+        session["signup_data"] = {
             "name": name,
             "email": email,
             "password": hashed_password
-        })
+        }
+        session["signup_otp"] = otp
+        session["signup_otp_time"] = time.time()
 
-        flash("Account created successfully", "success")
-        return redirect("/login")
+        # 📧 Send OTP (reuse your Brevo code)
+        try:
+            api_key = os.getenv("BREVO_API_KEY")
+
+            url = "https://api.brevo.com/v3/smtp/email"
+
+            headers = {
+                "accept": "application/json",
+                "api-key": api_key,
+                "content-type": "application/json"
+            }
+
+            data = {
+                "sender": {"email": "sonalipdas2005@gmail.com"},
+                "to": [{"email": email}],
+                "subject": "HealthCoach Signup OTP",
+                "htmlContent": f"<p>Your OTP is <b>{otp}</b></p>"
+            }
+
+            requests.post(url, json=data, headers=headers)
+
+            flash("OTP sent to your email", "success")
+            return redirect("/verify_signup")
+
+        except Exception as e:
+            flash("Error sending email", "error")
+            return redirect("/signup")
 
     return render_template("signup.html")
 
+#verify-signup
+@app.route("/verify_signup", methods=["GET","POST"])
+def verify_signup():
+
+    if "signup_data" not in session:
+        return redirect("/signup")
+
+    if request.method == "POST":
+
+        entered_otp = request.form["otp"]
+        stored_otp = session.get("signup_otp")
+        otp_time = session.get("signup_otp_time")
+
+        # ⏳ Expiry check (5 minutes)
+        if not otp_time or time.time() - otp_time > 300:
+            flash("OTP expired. Please signup again.", "error")
+            return redirect("/signup")
+
+        # ✅ OTP check
+        if entered_otp == stored_otp:
+
+            data = session.get("signup_data")
+
+            # 💾 Save user AFTER verification
+            users.insert_one({
+                "name": data["name"],
+                "email": data["email"],
+                "password": data["password"]
+            })
+
+            session.pop("signup_data", None)
+            session.pop("signup_otp", None)
+            session.pop("signup_otp_time", None)
+
+            flash("Account created successfully!", "success")
+            return redirect("/login")
+
+        else:
+            flash("Invalid OTP", "error")
+
+    return render_template("verify_signup.html")
 
 
 # PERSONAL DETAILS 
